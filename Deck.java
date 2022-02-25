@@ -8,10 +8,18 @@ import java.util.ArrayList;
 
 public class Deck extends ArrayList<Card> {
     /* Fields */
+    // None, this is an ArrayList of Cards.
 
     /* Constructors */
 
+    public Deck() {
+        // Construct an empty deck, such as a player starting with an empty hand:
+        this.clear();
+    }
+
     public Deck(String type, int count) {
+        // Construct a deck of cards:
+
         // For now, there's only one type of deck: standard52.
         // The deck count refers to how many decks are shuffed together.
 

@@ -57,10 +57,15 @@ Considerations:
 import java.util.Collections;
 
 class NinetyNine {
+
+    /* Variables */
+    // Note: These variables are being placed at the top of the class for easy
+    // edits:
+    private static int tokens = 3; // number of tokens players start with
+    private static String deckType = "standard52"; // type of deck the game is played with
+    private static int numDecks = 1; // how many decks to shuffle together
+
     public static void main(String[] args) {
-        // FIXME TEST:
-        Deck deck = new Deck("standard52", 1);
-        Collections.shuffle(deck);
-        System.out.print(deck.toString());
+        // code goes here
     }
 }
