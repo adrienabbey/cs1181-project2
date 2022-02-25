@@ -21,39 +21,25 @@ public class Card {
 
     // Methods:
 
+    public int getRankValue() {
+        // Return the value of the card's rank:
+        return rank.value;
+    }
+
     public String getRankString() {
-        // Return a formated string of this card's rank.
-
-        // Capitalize the first letter, but lowercase the rest:
-        // Source: https://attacomsian.com/blog/capitalize-first-letter-of-string-java
-        String r = ("" + rank);
-        r = r.substring(0, 1).toUpperCase() + r.substring(1).toLowerCase();
-
-        return r;
+        // Return the card's rank:
+        return rank.label;
     }
 
     public String getSuitString() {
-        // Return a formated string of this card's suit.
-
-        // Capitalize the first letter, but lowercase the rest:
-        String s = ("" + suit);
-        s = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
-        return s;
+        // Return the card's suit:
+        return suit.label;
     }
 
     @Override
     public String toString() {
-        // The rank and suit enums are all caps, so I need to fix that.
-
-        // Create strings to hold the card's rank and suit:
-        String r = ("" + rank);
-        String s = ("" + suit);
-
-        // Capitalize the first letter, but lowercase the rest:
-        r = r.substring(0, 1).toUpperCase() + r.toLowerCase().substring(1);
-        s = s.substring(0, 1).toUpperCase() + s.toLowerCase().substring(1);
-
-        return (r + " of " + s);
+        // Return the name of the card as a string:
+        return (rank.label + " of " + suit.label);
     }
 
 }
