@@ -9,17 +9,19 @@
 
 public class Card {
 
-    // Fields:
+    /* Fields */
+
     private final Suit suit;
     private final Rank rank;
 
-    // Constructor:
+    /* Constructors */
+
     public Card(Rank rank, Suit suit) {
         this.rank = rank;
         this.suit = suit;
     }
 
-    // Methods:
+    /* Methods */
 
     public int getRankValue() {
         // Return the value of the card's rank:

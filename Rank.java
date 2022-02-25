@@ -1,6 +1,9 @@
 // Adrien Abbey, CS-1181L-07, Feb. 25, 2022
 // Rank enum class for Project 2
 
+// Note: I'm attempting to keep this generic, for possible future reuse.
+// This class currently assumes the use of a standard 52-card deck.
+
 // I'm attempting to attach values to enums, as per here:
 // https://www.baeldung.com/java-enum-values
 // https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html
@@ -20,11 +23,11 @@ public enum Rank {
     QUEEN("Queen", 12),
     KING("King", 13);
 
-    // Enum fields:
+    /* Enum Fields */
     public final String label;
     public final int value;
 
-    // Enum constructor:
+    /* Enum Constructor */
     private Rank(String label, int value) {
         this.label = label;
         this.value = value;

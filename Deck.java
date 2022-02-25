@@ -1,15 +1,16 @@
-import java.util.ArrayList;
-
 // Adrien Abbey, CS-1181L-07, Feb. 25, 2022
 // Deck.class for Project 2
 
 // Note: This class may be useful for future projects, and therefore a 
 // generic, reusable class for playing cards.
 
-public class Deck extends ArrayList<Card> {
-    // Fields:
+import java.util.ArrayList;
 
-    // Constructor:
+public class Deck extends ArrayList<Card> {
+    /* Fields */
+
+    /* Constructors */
+
     public Deck(String type, int count) {
         // For now, there's only one type of deck: standard52.
         // The deck count refers to how many decks are shuffed together.
@@ -33,7 +34,7 @@ public class Deck extends ArrayList<Card> {
         }
     }
 
-    // Methods:
+    /* Methods */
 
     @Override
     public String toString() {
