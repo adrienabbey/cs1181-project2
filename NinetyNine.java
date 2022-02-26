@@ -54,8 +54,6 @@ Considerations:
     - TODO: Single deck or two?  What happens if cards run out?
 */
 
-import java.util.Collections;
-
 class NinetyNine {
 
     /* Variables */
@@ -66,14 +64,24 @@ class NinetyNine {
     public static void main(String[] args) {
         // FIXME: Test code:
 
-        // Create a new deck:
-        Deck deck = new Deck(deckType, numDecks);
-
         // Create new players:
-        Game game = new Game(new HumanPlayer("Dead Meat", tokens), new ComputerPlayer("HAL", tokens),
-                new ComputerPlayer("SHODAN", tokens), new ComputerPlayer("GLaDOS", tokens));
+        Game game = new Game(deckType, numDecks, new HumanPlayer("Dead Meat", tokens),
+                new ComputerPlayer("HAL", tokens), new ComputerPlayer("SHODAN", tokens),
+                new ComputerPlayer("GLaDOS", tokens));
 
-        // Print the current game's players and their tokens:
+        // Print the current game's player names and their tokens:
         System.out.println(game);
+
+        // Three round test:
+        for (int i = 0; i < 3; i++) {
+            // Start a new round:
+            game.newRound();
+
+            // Print out the player's hands:
+            game.printHands();
+
+            // Print out the current deck sizes:
+            game.printDeckSizes();
+        }
     }
 }
