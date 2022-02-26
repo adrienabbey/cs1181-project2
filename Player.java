@@ -46,4 +46,14 @@ public abstract class Player {
         return tokens;
     }
 
+    public String getName() {
+        // Getter: return the player's name:
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        // Return a string containing the player's name and current tokens:
+        return (name + " has " + tokens + " tokens left.");
+    }
 }

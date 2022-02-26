@@ -10,7 +10,7 @@ public class Game {
 
     /* Fields */
     private int pot; // How many tokens are in the pot
-    private ArrayList<Player> playerList;
+    private ArrayList<Player> playerList = new ArrayList<>();
     private int pTurn; // Tracks which player's turn it is.
     private Random rng = new Random();
 
@@ -46,6 +46,19 @@ public class Game {
     public Player whoseTurn() {
         // Getter: return the Player who is currently playing:
         return playerList.get(pTurn);
+    }
+
+    @Override
+    public String toString() {
+        // Return a String containing the current player names and their token counts:
+
+        String r = "";
+
+        for (Player p : playerList) {
+            r += (p + "\n");
+        }
+
+        return r;
     }
 
 }

@@ -64,6 +64,16 @@ class NinetyNine {
     private static int numDecks = 1; // how many decks to shuffle together
 
     public static void main(String[] args) {
-        // Code goes here:
+        // FIXME: Test code:
+
+        // Create a new deck:
+        Deck deck = new Deck(deckType, numDecks);
+
+        // Create new players:
+        Game game = new Game(new HumanPlayer("Dead Meat", tokens), new ComputerPlayer("HAL", tokens),
+                new ComputerPlayer("SHODAN", tokens), new ComputerPlayer("GLaDOS", tokens));
+
+        // Print the current game's players and their tokens:
+        System.out.println(game);
     }
 }

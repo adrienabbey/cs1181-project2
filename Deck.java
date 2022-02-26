@@ -44,6 +44,13 @@ public class Deck extends ArrayList<Card> {
 
     /* Methods */
 
+    public Card draw() {
+        // Draw a card from the deck, removing that card from the deck and returning it:
+        Card r = this.get(0);
+        this.remove(0);
+        return r;
+    }
+
     @Override
     public String toString() {
         // Returns a really long string of every card in the deck.
