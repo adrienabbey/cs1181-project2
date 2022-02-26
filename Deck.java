@@ -5,6 +5,7 @@
 // generic, reusable class for playing cards.
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Deck extends ArrayList<Card> {
     /* Fields */
@@ -44,16 +45,28 @@ public class Deck extends ArrayList<Card> {
 
     /* Methods */
 
-    public Card draw() {
-        // Draw a card from the deck, removing that card from the deck and returning it:
-        Card r = this.get(0);
-        this.remove(0);
-        return r;
+    public void emptyInto(Deck other) {
+        // Move all the cards in this deck into the given deck:
+
+        // Add each card in this deck to the other deck:
+        for (Card card : this) {
+            other.add(card);
+        }
+
+        // Remove each card in the other deck from this deck:
+        for (Card card : other) {
+            this.remove(card);
+        }
+    }
+
+    public void shuffle() {
+        // Shuffle the deck:
+        Collections.shuffle(this);
     }
 
     @Override
     public String toString() {
-        // Returns a really long string of every card in the deck.
+        // Returns a really, really long string of every card in the deck.
         String r = "";
 
         // For every card in the deck:
