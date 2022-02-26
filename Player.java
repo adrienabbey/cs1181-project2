@@ -22,6 +22,13 @@ public abstract class Player {
 
     /* Methods */
 
+    public void drawCard(Deck deck) {
+        // Draws a card from the given deck, moving it to the player's hand:
+        Card card = deck.get(0);
+        deck.remove(card);
+        hand.add(card);
+    }
+
     public boolean lost(Game game) {
         // The player lost the round. Return true if they can keep playing:
 
@@ -35,6 +42,22 @@ public abstract class Player {
             return false;
         }
     }
+
+    // public ArrayList<Card> newHand() {
+    // // When a new round starts, the player's hands should be empty:
+
+    // ArrayList<Card> discards = new ArrayList<Card>();
+
+    // // For every card in the player's hand:
+    // for (Card card : hand) {
+    // // Move the card from the hand to the discard pile:
+    // hand.remove(card);
+    // discards.add(card);
+    // }
+
+    // // Return the discarded cards:
+    // return discards;
+    // }
 
     public Deck getHand() {
         // Getter: return the player's hand:
