@@ -7,6 +7,13 @@
 // Note: I'm pulling Rank and Suit enums from their relevant classes.  This 
 // allows the enums to be used by other classes.
 
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+
 public class Card {
 
     /* Fields */
@@ -40,7 +47,27 @@ public class Card {
 
     public String getImageFilePath() {
         // Return the full path for the given card's image file:
-        return ("./SVG-cards-1.3/" + rank.filename + suit.filename + ".svg");
+        return ("./PNG-cards-1.3/" + rank.filename + suit.filename + ".png");
+    }
+
+    public ImageIcon getImage(int n) {
+        // Return the card's image with the given dimensions:
+        // Source: https://stackoverflow.com/a/18335435
+        ImageIcon imageIcon = new ImageIcon();
+        try {
+            imageIcon = new ImageIcon(
+                    ImageIO.read(new File(NinetyNine.game.getPlayer(0).getHand().get(n).getImageFilePath())));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        // Resize the image:
+        Image image = imageIcon.getImage();
+        Image resizedImage = image.getScaledInstance(100, 145, java.awt.Image.SCALE_SMOOTH);
+        imageIcon = new ImageIcon(resizedImage);
+
+        return imageIcon;
     }
 
     @Override
