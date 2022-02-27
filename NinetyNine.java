@@ -122,5 +122,10 @@ class NinetyNine {
         mainPanel.add(aiPlayer1, BorderLayout.WEST);
         mainPanel.add(aiPlayer2, BorderLayout.NORTH);
         mainPanel.add(aiPlayer3, BorderLayout.EAST);
+
+        // Using Card Images: https://stackoverflow.com/a/8334086
+        // For simplicity's sake, I'm just going to use JLabel ImageIcons for card
+        // images. Future implementations might implement animations, but that's a
+        // future problem for future me.
     }
 }
