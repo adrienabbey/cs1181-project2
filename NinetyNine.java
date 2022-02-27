@@ -52,7 +52,16 @@ Basic Design:
 
 Considerations:
     - TODO: Single deck or two?  What happens if cards run out?
+
+Attributions:
+    - Playing card graphics (public domain) are from: 
+        https://code.google.com/archive/p/vector-playing-cards/
 */
+
+import java.awt.BorderLayout;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 class NinetyNine {
 
@@ -62,26 +71,56 @@ class NinetyNine {
     private static int numDecks = 1; // how many decks to shuffle together
 
     public static void main(String[] args) {
-        // FIXME: Test code:
+        /*
+         * // FIXME: Test code:
+         * 
+         * // Create new players:
+         * Game game = new Game(deckType, numDecks, new HumanPlayer("Dead Meat",
+         * tokens),
+         * new ComputerPlayer("HAL", tokens), new ComputerPlayer("SHODAN", tokens),
+         * new ComputerPlayer("GLaDOS", tokens));
+         * 
+         * // Print the current game's player names and their tokens:
+         * System.out.println(game);
+         * 
+         * // Three round test:
+         * for (int i = 0; i < 3; i++) {
+         * // Start a new round:
+         * game.newRound();
+         * 
+         * // Print out the player's hands:
+         * game.printHands();
+         * 
+         * // Print out the current deck sizes:
+         * game.printDeckSizes();
+         * }
+         */
 
-        // Create new players:
-        Game game = new Game(deckType, numDecks, new HumanPlayer("Dead Meat", tokens),
-                new ComputerPlayer("HAL", tokens), new ComputerPlayer("SHODAN", tokens),
-                new ComputerPlayer("GLaDOS", tokens));
+        // Create the main window:
+        new NinetyNine();
+    }
 
-        // Print the current game's player names and their tokens:
-        System.out.println(game);
+    /* Window Constructor */
+    private NinetyNine() {
+        // Create the main window:
+        JFrame gameWindow = new JFrame("Ninety Nine");
 
-        // Three round test:
-        for (int i = 0; i < 3; i++) {
-            // Start a new round:
-            game.newRound();
+        // NOTE: I'm using BorderLayout for the main panel, as referenced here:
+        // https://www.javatpoint.com/java-layout-manager
 
-            // Print out the player's hands:
-            game.printHands();
+        // Create the game panels:
+        JPanel mainPanel = new JPanel(); // Main window panel
+        JPanel tablePanel = new JPanel(); // Center panel, has decks, game status, etc.
+        JPanel humanPlayer = new JPanel(); // South panel, has player's hand, etc.
+        JPanel aiPlayer1 = new JPanel(); // West panel, computer player 1
+        JPanel aiPlayer2 = new JPanel(); // North panel, computer player 2
+        JPanel aiPlayer3 = new JPanel(); // East panel, computer player 3
 
-            // Print out the current deck sizes:
-            game.printDeckSizes();
-        }
+        // Add subpanels to the main panel:
+        mainPanel.add(tablePanel, BorderLayout.CENTER);
+        mainPanel.add(humanPlayer, BorderLayout.SOUTH);
+        mainPanel.add(aiPlayer1, BorderLayout.WEST);
+        mainPanel.add(aiPlayer2, BorderLayout.NORTH);
+        mainPanel.add(aiPlayer3, BorderLayout.EAST);
     }
 }
