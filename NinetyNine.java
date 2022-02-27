@@ -59,8 +59,13 @@ Attributions:
 */
 
 import java.awt.BorderLayout;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 class NinetyNine {
@@ -69,32 +74,35 @@ class NinetyNine {
     private static int tokens = 3; // number of tokens players start with
     private static String deckType = "standard52"; // type of deck the game is played with
     private static int numDecks = 1; // how many decks to shuffle together
+    public static Game game; // FIXME: Should this be public?
+    private static ImageIcon p1c1Image; // human player's card images
+    private static ImageIcon p1c2Image;
+    private static ImageIcon p1c3Image;
 
     public static void main(String[] args) {
-        /*
-         * // FIXME: Test code:
-         * 
-         * // Create new players:
-         * Game game = new Game(deckType, numDecks, new HumanPlayer("Dead Meat",
-         * tokens),
-         * new ComputerPlayer("HAL", tokens), new ComputerPlayer("SHODAN", tokens),
-         * new ComputerPlayer("GLaDOS", tokens));
-         * 
-         * // Print the current game's player names and their tokens:
-         * System.out.println(game);
-         * 
-         * // Three round test:
-         * for (int i = 0; i < 3; i++) {
-         * // Start a new round:
-         * game.newRound();
-         * 
-         * // Print out the player's hands:
-         * game.printHands();
-         * 
-         * // Print out the current deck sizes:
-         * game.printDeckSizes();
-         * }
-         */
+
+        // FIXME: Test code:
+
+        // Create a new game:
+        game = new Game(deckType, numDecks, new HumanPlayer("Dead Meat",
+                tokens),
+                new ComputerPlayer("HAL", tokens), new ComputerPlayer("SHODAN", tokens),
+                new ComputerPlayer("GLaDOS", tokens));
+
+        // Print the current game's player names and their tokens:
+        System.out.println(game);
+
+        // Three round test:
+        for (int i = 0; i < 3; i++) {
+            // Start a new round:
+            game.newRound();
+
+            // Print out the player's hands:
+            game.printHands();
+
+            // Print out the current deck sizes:
+            game.printDeckSizes();
+        }
 
         // Create the main window:
         new NinetyNine();
@@ -127,5 +135,39 @@ class NinetyNine {
         // For simplicity's sake, I'm just going to use JLabel ImageIcons for card
         // images. Future implementations might implement animations, but that's a
         // future problem for future me.
+
+        // FIXME: TEST: Try adding card images to the player's pane:
+
+        // TODO: This might do better as a method, could be optimized.
+
+        // For each of the player's hand, load the appropriate image file:
+        // FIXME: Is there a better way to do this?
+        p1c1Image = game.getPlayer(0).getHand().get(0).getImage(0);
+        p1c2Image = game.getPlayer(0).getHand().get(1).getImage(1);
+        p1c3Image = game.getPlayer(0).getHand().get(2).getImage(2);
+
+        // Create objects for the player's panel:
+        JLabel playerName = new JLabel(game.getPlayer(0).getName() + "'s hand:");
+        JLabel p1card1 = new JLabel(p1c1Image);
+        JLabel p1card2 = new JLabel(p1c2Image);
+        JLabel p1card3 = new JLabel(p1c3Image);
+        JLabel playerTokens = new JLabel("Tokens: " + game.getPlayer(0).getTokens());
+
+        // Add those objects to the player's panel:
+        humanPlayer.add(playerName);
+        humanPlayer.add(p1card1);
+        humanPlayer.add(p1card2);
+        humanPlayer.add(p1card3);
+        humanPlayer.add(playerTokens);
+
+        // Add the main panel to the main window:
+        gameWindow.add(mainPanel);
+
+        // Setup the main window:
+        gameWindow.pack();
+        gameWindow.setVisible(true);
+        gameWindow.setLocationRelativeTo(null);
+        gameWindow.setResizable(false);
+        gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
