@@ -1,3 +1,5 @@
+import javax.swing.ImageIcon;
+
 // Adrien Abbey, CS-1181L-07, Feb. 25, 2022
 // Player abstract class for Project 2
 
@@ -42,22 +44,6 @@ public abstract class Player {
             return false;
         }
     }
-
-    // public ArrayList<Card> newHand() {
-    // // When a new round starts, the player's hands should be empty:
-
-    // ArrayList<Card> discards = new ArrayList<Card>();
-
-    // // For every card in the player's hand:
-    // for (Card card : hand) {
-    // // Move the card from the hand to the discard pile:
-    // hand.remove(card);
-    // discards.add(card);
-    // }
-
-    // // Return the discarded cards:
-    // return discards;
-    // }
 
     public Deck getHand() {
         // Getter: return the player's hand:
