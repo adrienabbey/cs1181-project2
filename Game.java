@@ -96,6 +96,11 @@ public class Game {
         return pot;
     }
 
+    public Player getPlayer(int n) {
+        // Return Player n:
+        return playerList.get(n);
+    }
+
     public Player whoseTurn() {
         // Getter: return the Player who is currently playing:
         // FIXME: Make sure this works properly:
