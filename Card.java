@@ -38,6 +38,11 @@ public class Card {
         return suit.label;
     }
 
+    public String getImageFilePath() {
+        // Return the full path for the given card's image file:
+        return ("./SVG-cards-1.3/" + rank.filename + suit.filename + ".svg");
+    }
+
     @Override
     public String toString() {
         // Return the name of the card as a string:
