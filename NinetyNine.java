@@ -59,10 +59,12 @@ Attributions:
 */
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -119,19 +121,39 @@ class NinetyNine {
         // Create the game panels:
         JPanel mainPanel = new JPanel(); // Main window panel
         JPanel tablePanel = new JPanel(); // Center panel, has decks, game status, etc.
-        JPanel humanPlayer = new JPanel(); // South panel, has player's hand, etc.
-        JPanel aiPlayer1 = new JPanel(); // West panel, computer player 1
-        JPanel aiPlayer2 = new JPanel(); // North panel, computer player 2
-        JPanel aiPlayer3 = new JPanel(); // East panel, computer player 3
+        JPanel playerPanel = new JPanel(); // South panel, has player's hand, etc.
+        JPanel c1panel = new JPanel(); // West panel, computer player 1
+        JPanel c2panel = new JPanel(); // North panel, computer player 2
+        JPanel c3panel = new JPanel(); // East panel, computer player 3
 
-        // Add subpanels to the main panel:
+        // Setup panel layouts:
+        mainPanel.setLayout(new BorderLayout());
+        tablePanel.setLayout(new BoxLayout(tablePanel, BoxLayout.Y_AXIS));
+        playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.Y_AXIS));
+        c1panel.setLayout(new BoxLayout(c1panel, BoxLayout.Y_AXIS));
+        c2panel.setLayout(new BoxLayout(c2panel, BoxLayout.Y_AXIS));
+        c3panel.setLayout(new BoxLayout(c3panel, BoxLayout.Y_AXIS));
+
+        // Setup panel alignments:
+        // tablePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // tablePanel.setAlignmentY(Component.CENTER_ALIGNMENT);
+        // playerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // playerPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
+        // c1panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // c1panel.setAlignmentY(Component.CENTER_ALIGNMENT);
+        // c2panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // c2panel.setAlignmentY(Component.CENTER_ALIGNMENT);
+        // c3panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // c3panel.setAlignmentY(Component.CENTER_ALIGNMENT);
+
+        // Add panels to the main panel:
         mainPanel.add(tablePanel, BorderLayout.CENTER);
-        mainPanel.add(humanPlayer, BorderLayout.SOUTH);
-        mainPanel.add(aiPlayer1, BorderLayout.WEST);
-        mainPanel.add(aiPlayer2, BorderLayout.NORTH);
-        mainPanel.add(aiPlayer3, BorderLayout.EAST);
+        mainPanel.add(playerPanel, BorderLayout.SOUTH);
+        mainPanel.add(c1panel, BorderLayout.WEST);
+        mainPanel.add(c2panel, BorderLayout.NORTH);
+        mainPanel.add(c3panel, BorderLayout.EAST);
 
-        // Using Card Images: https://stackoverflow.com/a/8334086
+        // FIXME: Source for image syntax: https://stackoverflow.com/a/8334086
         // For simplicity's sake, I'm just going to use JLabel ImageIcons for card
         // images. Future implementations might implement animations, but that's a
         // future problem for future me.
@@ -153,12 +175,48 @@ class NinetyNine {
         JLabel p1card3 = new JLabel(p1c3Image);
         JLabel playerTokens = new JLabel("Tokens: " + game.getPlayer(0).getTokens());
 
+        // Create sub-panels for the player panel:
+        JPanel pHeader = new JPanel();
+        JPanel pCards = new JPanel();
+        JPanel pFooter = new JPanel();
+
+        // Add the player sub-panels:
+        playerPanel.add(pHeader);
+        playerPanel.add(pCards);
+        playerPanel.add(pFooter);
+
         // Add those objects to the player's panel:
-        humanPlayer.add(playerName);
-        humanPlayer.add(p1card1);
-        humanPlayer.add(p1card2);
-        humanPlayer.add(p1card3);
-        humanPlayer.add(playerTokens);
+        pHeader.add(playerName);
+        pCards.add(p1card1);
+        pCards.add(p1card2);
+        pCards.add(p1card3);
+        pFooter.add(playerTokens);
+
+        // TODO: Can I turn each computer layout into a reusable class object?
+
+        // Create the computer player's UI objects:
+        JLabel c1name = new JLabel(game.getPlayer(1).getName());
+        JLabel c2name = new JLabel(game.getPlayer(2).getName());
+        JLabel c3name = new JLabel(game.getPlayer(3).getName());
+        JLabel c1tokens = new JLabel("Tokens: " + game.getPlayer(1).getTokens());
+        JLabel c2tokens = new JLabel("Tokens: " + game.getPlayer(2).getTokens());
+        JLabel c3tokens = new JLabel("Tokens: " + game.getPlayer(3).getTokens());
+
+        // Add the computer player's objects to their respective panels:
+        c1panel.add(c1name);
+        c1panel.add(c1tokens);
+        c2panel.add(c2name);
+        c2panel.add(c2tokens);
+        c3panel.add(c3name);
+        c3panel.add(c3tokens);
+
+        // Create the table UI objects:
+        JLabel scoreLabel = new JLabel("Score: " + game.getScore());
+        JLabel potLabel = new JLabel("Pot: " + game.getPot());
+
+        // Add the table objects to the table panel:
+        tablePanel.add(scoreLabel);
+        tablePanel.add(potLabel);
 
         // Add the main panel to the main window:
         gameWindow.add(mainPanel);
@@ -167,7 +225,7 @@ class NinetyNine {
         gameWindow.pack();
         gameWindow.setVisible(true);
         gameWindow.setLocationRelativeTo(null);
-        gameWindow.setResizable(false);
+        // gameWindow.setResizable(false);
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
