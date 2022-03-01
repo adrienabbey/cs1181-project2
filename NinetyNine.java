@@ -60,6 +60,7 @@ Attributions:
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.GridBagLayout;
 import java.io.File;
 import java.io.IOException;
 
@@ -80,6 +81,10 @@ class NinetyNine {
     private static ImageIcon p1c1Image; // human player's card images
     private static ImageIcon p1c2Image;
     private static ImageIcon p1c3Image;
+    private static ImageIcon cardBack0; // card back's image and various rotations
+    private static ImageIcon cardBack1; // FIXME: can I do this better?
+    private static ImageIcon cardBack2;
+    private static ImageIcon cardBack3;
 
     public static void main(String[] args) {
 
@@ -115,6 +120,32 @@ class NinetyNine {
         // Create the main window:
         JFrame gameWindow = new JFrame("Ninety Nine");
 
+        // FIXME: Load the card backgroup image:
+        try {
+            cardBack0 = new ImageIcon(ImageIO.read(new File("./cardbacks/disappointment0.png")));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            cardBack1 = new ImageIcon(ImageIO.read(new File("./cardbacks/disappointment1.png")));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            cardBack2 = new ImageIcon(ImageIO.read(new File("./cardbacks/disappointment2.png")));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            cardBack3 = new ImageIcon(ImageIO.read(new File("./cardbacks/disappointment3.png")));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         // NOTE: I'm using BorderLayout for the main panel, as referenced here:
         // https://www.javatpoint.com/java-layout-manager
 
@@ -133,18 +164,6 @@ class NinetyNine {
         c1panel.setLayout(new BoxLayout(c1panel, BoxLayout.Y_AXIS));
         c2panel.setLayout(new BoxLayout(c2panel, BoxLayout.Y_AXIS));
         c3panel.setLayout(new BoxLayout(c3panel, BoxLayout.Y_AXIS));
-
-        // Setup panel alignments:
-        // tablePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        // tablePanel.setAlignmentY(Component.CENTER_ALIGNMENT);
-        // playerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        // playerPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
-        // c1panel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        // c1panel.setAlignmentY(Component.CENTER_ALIGNMENT);
-        // c2panel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        // c2panel.setAlignmentY(Component.CENTER_ALIGNMENT);
-        // c3panel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        // c3panel.setAlignmentY(Component.CENTER_ALIGNMENT);
 
         // Add panels to the main panel:
         mainPanel.add(tablePanel, BorderLayout.CENTER);
@@ -201,22 +220,80 @@ class NinetyNine {
         JLabel c1tokens = new JLabel("Tokens: " + game.getPlayer(1).getTokens());
         JLabel c2tokens = new JLabel("Tokens: " + game.getPlayer(2).getTokens());
         JLabel c3tokens = new JLabel("Tokens: " + game.getPlayer(3).getTokens());
+        JLabel c1card1 = new JLabel(cardBack1);
+        JLabel c1card2 = new JLabel(cardBack1);
+        JLabel c1card3 = new JLabel(cardBack1);
+        JLabel c2card1 = new JLabel(cardBack2);
+        JLabel c2card2 = new JLabel(cardBack2);
+        JLabel c2card3 = new JLabel(cardBack2);
+        JLabel c3card1 = new JLabel(cardBack3);
+        JLabel c3card2 = new JLabel(cardBack3);
+        JLabel c3card3 = new JLabel(cardBack3);
+
+        // Create subpanels for each computer player:
+        JPanel c1header = new JPanel();
+        JPanel c2header = new JPanel();
+        JPanel c3header = new JPanel();
+        JPanel c1hand = new JPanel();
+        JPanel c2hand = new JPanel();
+        JPanel c3hand = new JPanel();
+        JPanel c1footer = new JPanel();
+        JPanel c2footer = new JPanel();
+        JPanel c3footer = new JPanel();
+
+        // Configure subpanel layouts:
+        c1hand.setLayout(new BoxLayout(c1hand, BoxLayout.Y_AXIS));
+        c3hand.setLayout(new BoxLayout(c3hand, BoxLayout.Y_AXIS));
 
         // Add the computer player's objects to their respective panels:
-        c1panel.add(c1name);
-        c1panel.add(c1tokens);
-        c2panel.add(c2name);
-        c2panel.add(c2tokens);
-        c3panel.add(c3name);
-        c3panel.add(c3tokens);
+        c1header.add(c1name);
+        c1hand.add(c1card1);
+        c1hand.add(c1card2);
+        c1hand.add(c1card3);
+        c1footer.add(c1tokens);
+
+        c2header.add(c2name);
+        c2hand.add(c2card1);
+        c2hand.add(c2card2);
+        c2hand.add(c2card3);
+        c2footer.add(c2tokens);
+
+        c3header.add(c3name);
+        c3hand.add(c3card1);
+        c3hand.add(c3card2);
+        c3hand.add(c3card3);
+        c3footer.add(c3tokens);
+
+        // Add the sub-panels to each player's field:
+        c1panel.add(c1header);
+        c1panel.add(c1hand);
+        c1panel.add(c1footer);
+        c2panel.add(c2header);
+        c2panel.add(c2hand);
+        c2panel.add(c2footer);
+        c3panel.add(c3header);
+        c3panel.add(c3hand);
+        c3panel.add(c3footer);
 
         // Create the table UI objects:
         JLabel scoreLabel = new JLabel("Score: " + game.getScore());
+        JLabel drawPile = new JLabel(cardBack0);
         JLabel potLabel = new JLabel("Pot: " + game.getPot());
 
-        // Add the table objects to the table panel:
-        tablePanel.add(scoreLabel);
-        tablePanel.add(potLabel);
+        // Create sub-panels for the table panel:
+        JPanel tHeader = new JPanel();
+        JPanel tDecks = new JPanel();
+        JPanel tFooter = new JPanel();
+
+        // Add the table objects to the table's sub-panels:
+        tHeader.add(scoreLabel);
+        tDecks.add(drawPile);
+        tFooter.add(potLabel);
+
+        // Add the table sub-panels to the table panel:
+        tablePanel.add(tHeader);
+        tablePanel.add(tDecks);
+        tablePanel.add(tFooter);
 
         // Add the main panel to the main window:
         gameWindow.add(mainPanel);
