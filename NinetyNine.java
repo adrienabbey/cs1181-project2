@@ -85,6 +85,10 @@ class NinetyNine {
     private static ImageIcon cardBack1; // FIXME: can I do this better?
     private static ImageIcon cardBack2;
     private static ImageIcon cardBack3;
+    private static ImageIcon upArrow;
+    private static ImageIcon downArrow;
+    private static ImageIcon rightArrow;
+    private static ImageIcon leftArrow;
 
     public static void main(String[] args) {
 
@@ -96,20 +100,8 @@ class NinetyNine {
                 new ComputerPlayer("HAL", tokens), new ComputerPlayer("SHODAN", tokens),
                 new ComputerPlayer("GLaDOS", tokens));
 
-        // Print the current game's player names and their tokens:
-        System.out.println(game);
-
-        // Three round test:
-        for (int i = 0; i < 3; i++) {
-            // Start a new round:
-            game.newRound();
-
-            // Print out the player's hands:
-            game.printHands();
-
-            // Print out the current deck sizes:
-            game.printDeckSizes();
-        }
+        // Start a new game:
+        game.newRound();
 
         // Create the main window:
         new NinetyNine();
@@ -127,6 +119,11 @@ class NinetyNine {
             cardBack1 = new ImageIcon(ImageIO.read(new File("./cardbacks/disappointment0.png")));
             cardBack2 = new ImageIcon(ImageIO.read(new File("./cardbacks/disappointment0.png")));
             cardBack3 = new ImageIcon(ImageIO.read(new File("./cardbacks/disappointment0.png")));
+            upArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/upArrow.png")));
+            downArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/downArrow.png")));
+            rightArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/rightArrow.png")));
+            leftArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/leftArrow.png")));
+
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -268,6 +265,10 @@ class NinetyNine {
         JLabel scoreLabel = new JLabel("Score: " + game.getScore());
         JLabel drawPile = new JLabel(cardBack0);
         JLabel potLabel = new JLabel("Pot: " + game.getPot());
+        JLabel discardPile = new JLabel(cardBack0);
+        JLabel turnIndicator = new JLabel(downArrow);
+        // TODO: Properly update the display of the discard pile!
+        // TODO: Add a turn indicator, update as needed!
 
         // Create sub-panels for the table panel:
         JPanel tHeader = new JPanel();
@@ -276,6 +277,8 @@ class NinetyNine {
 
         // Add the table objects to the table's sub-panels:
         tHeader.add(scoreLabel);
+        tDecks.add(discardPile);
+        tDecks.add(turnIndicator);
         tDecks.add(drawPile);
         tFooter.add(potLabel);
 
