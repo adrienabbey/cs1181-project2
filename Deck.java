@@ -45,6 +45,25 @@ public class Deck extends ArrayList<Card> {
 
     /* Methods */
 
+    public boolean playCard(int cardIndex, Deck discardDeck) {
+        // Play the card from this deck (using the given index value) to the specified
+        // deck:
+
+        // Verify that the specified card exists:
+        try {
+            this.get(cardIndex);
+        } catch (IndexOutOfBoundsException e) {
+            // Card does not exist, return false to indicate failure:
+            return false;
+        }
+
+        Card playCard = this.get(cardIndex);
+        this.remove(cardIndex);
+        discardDeck.add(playCard);
+        // Return true to indicate success:
+        return true;
+    }
+
     public void emptyInto(Deck other) {
         // Move all the cards in this deck into the given deck:
 
