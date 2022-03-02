@@ -56,6 +56,7 @@ Considerations:
 Attributions:
     - Playing card graphics (public domain) are from: 
         https://code.google.com/archive/p/vector-playing-cards/
+    - FIXME: Card backs and arrow images are my own creation.
 */
 
 import java.awt.BorderLayout;
@@ -89,6 +90,7 @@ class NinetyNine {
     private static ImageIcon downArrow;
     private static ImageIcon rightArrow;
     private static ImageIcon leftArrow;
+    private static ImageIcon turnImage;
 
     public static void main(String[] args) {
 
@@ -123,6 +125,7 @@ class NinetyNine {
             downArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/downArrow.png")));
             rightArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/rightArrow.png")));
             leftArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/leftArrow.png")));
+            turnImage = new ImageIcon();
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -261,12 +264,34 @@ class NinetyNine {
         c3panel.add(c3hand);
         c3panel.add(c3footer);
 
+        // FIXME: Set the turnIndicator to prevent compiler complaints:
+        // turnImage = downArrow;
+
+        // Determine which turn indicator image to use:
+        switch (game.whoseTurn()) {
+            case 0:
+                turnImage = downArrow;
+                break;
+            case 1:
+                turnImage = leftArrow;
+                break;
+            case 2:
+                turnImage = upArrow;
+                break;
+            case 3:
+                turnImage = rightArrow;
+                break;
+            default:
+                System.err.println("ERROR: Invalid turn indicator.  This shouldn't happen.");
+                break;
+        }
+
         // Create the table UI objects:
         JLabel scoreLabel = new JLabel("Score: " + game.getScore());
         JLabel drawPile = new JLabel(cardBack0);
         JLabel potLabel = new JLabel("Pot: " + game.getPot());
         JLabel discardPile = new JLabel(cardBack0);
-        JLabel turnIndicator = new JLabel(downArrow);
+        JLabel turnIndicator = new JLabel(turnImage);
         // TODO: Properly update the display of the discard pile!
         // TODO: Add a turn indicator, update as needed!
 
