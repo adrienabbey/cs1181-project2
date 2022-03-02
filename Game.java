@@ -66,6 +66,18 @@ public class Game {
                 p.drawCard(drawDeck);
             }
         }
+
+        // Deal a card to the discard pile:
+        if (drawDeck.playCard(0, discardDeck)) {
+            // Success is good, do nothing.
+        } else {
+            // FIXME: Something that should never happen happened:
+            System.err.println("ERROR: Unable to play a card from the draw deck to the discard deck.");
+        }
+    }
+
+    public void play() {
+        // Game loop method: start
     }
 
     public boolean drawFromDeck(Player p) {
