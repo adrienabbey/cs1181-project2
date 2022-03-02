@@ -113,10 +113,10 @@ public class Game {
         return playerList.get(n);
     }
 
-    public Player whoseTurn() {
-        // Getter: return the Player who is currently playing:
+    public int whoseTurn() {
+        // Getter: return the index of the player who is currently playing:
         // FIXME: Make sure this works properly:
-        return playerList.get(4 % pTurn);
+        return (pTurn % 4);
     }
 
     public void printHands() {
