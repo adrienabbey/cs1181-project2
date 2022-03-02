@@ -1,5 +1,3 @@
-import javax.swing.ImageIcon;
-
 // Adrien Abbey, CS-1181L-07, Feb. 25, 2022
 // Player abstract class for Project 2
 
