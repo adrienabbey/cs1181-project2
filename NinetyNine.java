@@ -114,7 +114,7 @@ class NinetyNine {
         // Create the main window:
         JFrame gameWindow = new JFrame("Ninety Nine");
 
-        // FIXME: Load the card backgroup images:
+        // FIXME: Load the game images:
         try {
             // FIXME: Changing these to the same image:
             cardBack0 = new ImageIcon(ImageIO.read(new File("./cardbacks/disappointment0.png")));
@@ -172,9 +172,9 @@ class NinetyNine {
 
         // For each of the player's hand, load the appropriate image file:
         // FIXME: Is there a better way to do this?
-        p1c1Image = game.getPlayer(0).getHand().get(0).getImage(0);
-        p1c2Image = game.getPlayer(0).getHand().get(1).getImage(1);
-        p1c3Image = game.getPlayer(0).getHand().get(2).getImage(2);
+        p1c1Image = game.getPlayer(0).getHand().get(0).getImage();
+        p1c2Image = game.getPlayer(0).getHand().get(1).getImage();
+        p1c3Image = game.getPlayer(0).getHand().get(2).getImage();
 
         // Create objects for the player's panel:
         JLabel playerName = new JLabel(game.getPlayer(0).getName() + "'s hand:");
@@ -288,9 +288,9 @@ class NinetyNine {
 
         // Create the table UI objects:
         JLabel scoreLabel = new JLabel("Score: " + game.getScore());
-        JLabel drawPile = new JLabel(cardBack0);
+        JLabel drawPileLabel = new JLabel(cardBack0);
         JLabel potLabel = new JLabel("Pot: " + game.getPot());
-        JLabel discardPile = new JLabel(cardBack0);
+        JLabel discardPileLabel = new JLabel(game.getDiscardImage());
         JLabel turnIndicator = new JLabel(turnImage);
         // TODO: Properly update the display of the discard pile!
         // TODO: Add a turn indicator, update as needed!
@@ -302,9 +302,9 @@ class NinetyNine {
 
         // Add the table objects to the table's sub-panels:
         tHeader.add(scoreLabel);
-        tDecks.add(discardPile);
+        tDecks.add(discardPileLabel);
         tDecks.add(turnIndicator);
-        tDecks.add(drawPile);
+        tDecks.add(drawPileLabel);
         tFooter.add(potLabel);
 
         // Add the table sub-panels to the table panel:
