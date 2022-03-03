@@ -6,14 +6,18 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.ImageIcon;
+
 public class Game {
 
     /* Fields */
     private Random rng = new Random();
     private ArrayList<Player> playerList = new ArrayList<>();
     private int pot; // How many tokens are in the pot
-    private int pTurn; // Tracks which player's turn it is.
+    private int playerTurn; // Tracks which player's turn it is.
+    private int dealerTurn; // Trakc which player is the dealer this round.
     private int rScore; // Track the current round's value
+    private boolean rotation; // if true, rotate clockwise, otherwise counter-clockwise
     private Deck drawDeck;
     private Deck discardDeck;
 
@@ -28,6 +32,9 @@ public class Game {
         // The game starts with an empty pot:
         pot = 0;
 
+        // The game starts with clockwise rotation:
+        rotation = true;
+
         // Add players to the player list:
         playerList.add(player1);
         playerList.add(player2);
@@ -35,14 +42,18 @@ public class Game {
         playerList.add(player4);
 
         // Randomly set which player's turn it is:
-        pTurn = rng.nextInt(4); // returns 0 to 3
+        playerTurn = rng.nextInt(4); // returns 0 to 3
+        dealerTurn = playerTurn; // The first player is both the dealer and the first to play.
     }
 
     /* Methods */
 
     public void newRound() {
-        // New round, new player's turn:
-        pTurn++;
+        // New round, new player's turn to deal:
+        dealerTurn++;
+
+        // The dealer is also the first to play:
+        playerTurn = dealerTurn;
 
         // Reset the current score:
         rScore = 0;
@@ -68,16 +79,54 @@ public class Game {
         }
 
         // Deal a card to the discard pile:
-        if (drawDeck.playCard(0, discardDeck)) {
-            // Success is good, do nothing.
-        } else {
-            // FIXME: Something that should never happen happened:
-            System.err.println("ERROR: Unable to play a card from the draw deck to the discard deck.");
-        }
+        drawDeck.playCard(0, discardDeck);
+        updateScore();
     }
 
     public void play() {
         // Game loop method: start
+    }
+
+    public boolean updateScore() {
+        // Update the game's score using the given card. If the score is over 99, return
+        // false, indicating the round is over.
+
+        Card card = discardDeck.get(0);
+
+        // If the card is special (13, 10, 9, or 4):
+        if (card.getRankValue() == 13) {
+            // If a king, set score to 99:
+            rScore = 99;
+        } else if (card.getRankValue() == 10) {
+            // If a 10, subtract 10 from the score (negative values acceptable):
+            rScore -= 10;
+        } else if (card.getRankValue() == 9) {
+            // If 9, hold (do nothing).
+        } else if (card.getRankValue() == 4) {
+            // If 4, reverse rotation:
+            // TODO: Verify that this means the previous player goes next.
+            if (rotation == true) {
+                rotation = false;
+            } else {
+                rotation = true;
+            }
+        } else if (card.getRankValue() > 10) {
+            // If the card isn't special and it's value is greater than 10, add 10 to the
+            // score:
+            rScore += 10;
+        } else {
+            // Otherwise, add the card's rank value to the score:
+            rScore = rScore + card.getRankValue();
+        }
+
+        // If the score is 99 or less:
+        if (rScore < 100) {
+            // Then the game continues:
+            return true;
+        } else {
+            // Otherwise, the round is over:
+            return false;
+        }
     }
 
     public boolean drawFromDeck(Player p) {
@@ -98,6 +147,11 @@ public class Game {
         pot++;
     }
 
+    public ImageIcon getDiscardImage() {
+        // Return the image of the card that is on top of the discard pile:
+        return discardDeck.get(0).getImage();
+    }
+
     public int getScore() {
         // Return the round's current score:
         return rScore;
@@ -116,7 +170,7 @@ public class Game {
     public int whoseTurn() {
         // Getter: return the index of the player who is currently playing:
         // FIXME: Make sure this works properly:
-        return (pTurn % 4);
+        return (playerTurn % 4);
     }
 
     public void printHands() {
