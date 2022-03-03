@@ -14,12 +14,15 @@ public class Deck extends ArrayList<Card> {
     /* Constructors */
 
     public Deck() {
-        // Construct an empty deck, such as a player starting with an empty hand:
-        this.clear();
+        // Generic blank deck constructor:
+        super();
     }
 
     public Deck(String type, int count) {
         // Construct a deck of cards:
+
+        // This constructs an ArrayList like normal at first:
+        super();
 
         // For now, there's only one type of deck: standard52.
         // The deck count refers to how many decks are shuffed together.
@@ -58,8 +61,8 @@ public class Deck extends ArrayList<Card> {
         }
 
         Card playCard = this.get(cardIndex);
-        this.remove(cardIndex);
-        discardDeck.add(playCard);
+        this.remove(playCard);
+        discardDeck.add(0, playCard);
         // Return true to indicate success:
         return true;
     }
