@@ -50,13 +50,12 @@ public class Card {
         return ("./PNG-cards-1.3/" + rank.filename + suit.filename + ".png");
     }
 
-    public ImageIcon getImage(int n) {
+    public ImageIcon getImage() {
         // Return the card's image with the given dimensions:
         // Source: https://stackoverflow.com/a/18335435
         ImageIcon imageIcon = new ImageIcon();
         try {
-            imageIcon = new ImageIcon(
-                    ImageIO.read(new File(NinetyNine.game.getPlayer(0).getHand().get(n).getImageFilePath())));
+            imageIcon = new ImageIcon(ImageIO.read(new File(this.getImageFilePath())));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
