@@ -8,4 +8,10 @@ public class HumanPlayer extends Player {
     public HumanPlayer(String name, int tokens) {
         super(name, tokens);
     }
+
+    /* Methods */
+    public boolean playTurn() {
+        // FIXME TEST: Return true for testing purposes.
+        return true;
+    }
 }
