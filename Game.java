@@ -78,13 +78,29 @@ public class Game {
             }
         }
 
+        // FIXME TEST: Sort each player's hand by discard desirability and print:
+        for (Player p : playerList) {
+            p.getHand().sort();
+            System.out.println(p.getHand());
+        }
+
         // Deal a card to the discard pile:
         drawDeck.playCard(0, discardDeck);
         updateScore();
-    }
 
-    public void play() {
-        // Game loop method: start
+        // FIXME TESTCODE: Make the AI play:
+        playerList.get(1).playTurn();
+        playerList.get(2).playTurn();
+        playerList.get(3).playTurn();
+
+        // FIXME TEST: Sort each player's hand by discard desirability and print:
+        for (Player p : playerList) {
+            p.getHand().sort();
+            System.out.println(p.getHand());
+        }
+
+        // FIXME TEST: Print out all the cards in the discard pile:
+        System.out.println("Discard pile: " + discardDeck);
     }
 
     public boolean updateScore() {
@@ -145,6 +161,11 @@ public class Game {
     public void addToPot() {
         // Add a token to the pot:
         pot++;
+    }
+
+    public Deck getDiscardDeck() {
+        // Returns the discard deck:
+        return discardDeck;
     }
 
     public ImageIcon getDiscardImage() {
