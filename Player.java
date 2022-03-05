@@ -22,6 +22,8 @@ public abstract class Player {
 
     /* Methods */
 
+    public abstract boolean playTurn();
+
     public void drawCard(Deck deck) {
         // Draws a card from the given deck, moving it to the player's hand:
         Card card = deck.get(0);
@@ -31,6 +33,7 @@ public abstract class Player {
 
     public boolean lost(Game game) {
         // The player lost the round. Return true if they can keep playing:
+        // TODO: Reveal the player's hand if they lose.
 
         if (tokens > 0) {
             // If the player has a token, toss it in the pot:
