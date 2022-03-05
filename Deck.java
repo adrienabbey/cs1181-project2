@@ -81,6 +81,12 @@ public class Deck extends ArrayList<Card> {
         }
     }
 
+    public void sort() {
+        // Sort the current deck by discard desirability. This is most useful to
+        // ComputerPlayers.
+        Collections.sort(this);
+    }
+
     public void shuffle() {
         // Shuffle the deck:
         Collections.shuffle(this);
