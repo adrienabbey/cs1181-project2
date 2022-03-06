@@ -14,9 +14,9 @@ public class Game {
     private Random rng = new Random();
     private ArrayList<Player> playerList = new ArrayList<>();
     private int pot; // How many tokens are in the pot
-    private int playerTurn; // Tracks which player's turn it is.
-    private int dealerTurn; // Trakc which player is the dealer this round.
-    private int rScore; // Track the current round's value
+    private int playerTurnIndex; // Tracks the index value of which player's turn it is.
+    private int dealerTurnIndex; // Tracks the index value of which player is the dealer this round.
+    private int roundScore; // Track the current round's value
     private boolean rotation; // if true, rotate clockwise, otherwise counter-clockwise
     private Deck drawDeck;
     private Deck discardDeck;
@@ -42,24 +42,30 @@ public class Game {
         playerList.add(player4);
 
         // Randomly set which player's turn it is:
-        playerTurn = rng.nextInt(4); // returns 0 to 3
-        dealerTurn = playerTurn; // The first player is both the dealer and the first to play.
+        playerTurnIndex = rng.nextInt(4); // returns 0 to 3
+        dealerTurnIndex = playerTurnIndex; // The first player is both the dealer and the first to play.
     }
 
     /* Methods */
 
     public void newRound() {
+        System.out.println();
+        System.out.println("Starting a new round.");
+
         // New round, new player's turn to deal:
-        dealerTurn++;
+        nextDealer();
+
+        // Rotation resets to clockwise:
+        rotation = true;
 
         // Print out the dealer info:
-        System.out.println(playerList.get(this.getDealerTurn()).getName() + " is the dealer.");
+        System.out.println(getDealer().getName() + " is the dealer.");
 
         // The dealer is also the first to play:
-        playerTurn = dealerTurn;
+        playerTurnIndex = dealerTurnIndex;
 
         // Reset the current score:
-        rScore = 0;
+        roundScore = 0;
 
         // Return all the cards in each player's hand back to the game deck:
         for (Player p : playerList) {
@@ -76,8 +82,11 @@ public class Game {
         for (int i = 0; i < 3; i++) {
             // For each player:
             for (Player p : playerList) {
-                // Deal a card to the player:
-                p.drawCard(drawDeck);
+                // If the player is playing:
+                if (p.isPlaying()) {
+                    // Deal a card to the player:
+                    p.drawCard(drawDeck);
+                }
             }
         }
 
@@ -91,73 +100,60 @@ public class Game {
         drawDeck.playCard(0, discardDeck);
         updateScore();
         System.out.println(
-                playerList.get(getPlayersTurn()).getName() + " turned up " + discardDeck.get(0)
+                getPlayer().getName() + " turned up " + discardDeck.get(0)
                         + " as the first card.");
 
         // Update the turn indicator:
         this.nextPlayer();
 
-        // FIXME TESTCODE: Make the AI play:
-        // playerList.get(1).playTurn();
-        // playerList.get(2).playTurn();
-        // playerList.get(3).playTurn();
-
-        // FIXME TEST: Sort each player's hand by discard desirability and print:
-        // for (Player p : playerList) {
-        // p.getHand().sort();
-        // System.out.println(p.getHand());
-        // }
-
-        // FIXME TEST: Print out all the cards in the discard pile:
-        // System.out.println("Discard pile: " + discardDeck);
+        // FIXME: I cannot do this! UI hasn't painted yet!
+        // Start the game loop:
+        // gameLoop();
     }
 
     public void gameLoop() {
-        // Gameplay loop, called by newRound method:
+        // Gameplay loop, called by the main method after first starting a newRound
+
+        // Update the UI:
+        NinetyNine.updateUI();
 
         // Keep playing until someone looses:
         while (true) {
             // Next player plays:
-            playerList.get(getPlayersTurn()).playTurn();
+            getPlayer().playTurn();
+
+            // Update teh score:
+            updateScore();
 
             // Update the UI:
             NinetyNine.updateUI();
 
             // Check the score for a loss:
-            if (rScore > 99) {
-                // Someone lost:
-                System.out.println(playerList.get(getPlayersTurn()) + " lost.");
-
+            if (roundScore > 99) {
                 // That player tosses a token:
-                playerList.get(getPlayersTurn()).lost(NinetyNine.game);
+                if (getPlayer().lostRound(NinetyNine.game)) {
+                    // If true, the player stays in the game.
+                } else {
+                    // If false, that player is out for good:
+                    getPlayer().isOut();
+                }
 
                 // Update the UI;
-                // NinetyNine.updateUI();
+                NinetyNine.updateUI();
 
                 // Round ends:
                 break;
             } else {
-                // Otherwise the game continues.
-
-                // Update the score:
-                NinetyNine.game.updateScore();
-
-                // Next player's turn:
+                // Otherwise gameplay continues:
                 nextPlayer();
+                NinetyNine.updateUI();
             }
-
-            // Next player plays:
-            // if (playerList.get(getPlayersTurn()).playTurn()) {
-            // // If true, they played a card successfully:
-
-            // // Update the score:
-            // NinetyNine.game.updateScore();
-            // } else {
-            // // FIXME: If false, the player lost:
-            // playerList.get(getPlayersTurn()).lost(NinetyNine.game);
-            // break;
-            // }
         }
+
+        // TODO: Check to see if more than two players can keep playing.
+
+        // Start a new round:
+        newRound();
     }
 
     public boolean updateScore() {
@@ -169,10 +165,10 @@ public class Game {
         // If the card is special (13, 10, 9, or 4):
         if (card.getRankValue() == 13) {
             // If a king, set score to 99:
-            rScore = 99;
+            roundScore = 99;
         } else if (card.getRankValue() == 10) {
             // If a 10, subtract 10 from the score (negative values acceptable):
-            rScore -= 10;
+            roundScore -= 10;
         } else if (card.getRankValue() == 9) {
             // If 9, hold (do nothing).
         } else if (card.getRankValue() == 4) {
@@ -186,14 +182,14 @@ public class Game {
         } else if (card.getRankValue() > 10) {
             // If the card isn't special and it's value is greater than 10, add 10 to the
             // score:
-            rScore += 10;
+            roundScore += 10;
         } else {
             // Otherwise, add the card's rank value to the score:
-            rScore = rScore + card.getRankValue();
+            roundScore = roundScore + card.getRankValue();
         }
 
         // If the score is 99 or less:
-        if (rScore < 100) {
+        if (roundScore < 100) {
             // Then the game continues:
             return true;
         } else {
@@ -216,13 +212,56 @@ public class Game {
     }
 
     public void nextPlayer() {
-        // Increments the turn indicator:
-        if (rotation) {
-            // If clockwise rotation (true), increment the turn indicator:
-            playerTurn++;
-        } else {
-            // Otherwise, decrement the turn indicator:
-            playerTurn--;
+        // Increments to the next valid player:
+
+        // The playerTurn variable holds the index value of the player whose turn it
+        // should be:
+
+        // Keep trying until a valid player is selected:
+        while (true) {
+            // Increments the turn indicator:
+            if (rotation) {
+                // If clockwise rotation (true), increment the turn indicator:
+                playerTurnIndex++;
+                // If the index value got too large:
+                if (playerTurnIndex > 3) {
+                    // Loop back to a valid player index:
+                    playerTurnIndex -= 4;
+                }
+            } else {
+                // Otherwise, decrement the turn indicator:
+                playerTurnIndex--;
+                // If the index value is too small:
+                if (playerTurnIndex < 0) {
+                    // Loop back to a valid index value:
+                    playerTurnIndex += 4;
+                }
+            }
+            // Validate that the selected player is still playing:
+            if (getPlayer().isPlaying()) {
+                // If they are playing, stop trying:
+                break;
+            }
+        }
+    }
+
+    public void nextDealer() {
+        // Progresses to the next viable dealer:
+
+        // Keep trying until done:
+        while (true) {
+            // Increment the dealer tracker:
+            dealerTurnIndex++;
+            // Validate the dealer index value:
+            if (dealerTurnIndex > 3) {
+                // Loop back to a valid index value:
+                dealerTurnIndex -= 4;
+            }
+            // Check to see if the selected player is still playing:
+            if (getDealer().isPlaying()) {
+                // If the selected player is playing, then done:
+                break;
+            }
         }
     }
 
@@ -248,7 +287,7 @@ public class Game {
 
     public int getScore() {
         // Return the round's current score:
-        return rScore;
+        return roundScore;
     }
 
     public int getPot() {
@@ -261,15 +300,25 @@ public class Game {
         return playerList.get(n);
     }
 
-    public int getPlayersTurn() {
-        // Getter: return the index of the player who is currently playing:
-        // FIXME: Make sure this works properly:
-        return (playerTurn % 4);
+    public Player getPlayer() {
+        // Getter: return the player whose turn it is:
+        return playerList.get(playerTurnIndex);
     }
 
-    public int getDealerTurn() {
-        // Return the index of the player who is currently dealing:
-        return (dealerTurn % 4);
+    public ArrayList<Player> getPlayers() {
+        // Returns the player list:
+        return playerList;
+    }
+
+    public int getPlayerIndex() {
+        // Return the index value of whose turn it is:
+        // System.out.println(playerTurnIndex); // FIXME TEST
+        return playerTurnIndex;
+    }
+
+    public Player getDealer() {
+        // Return the player who is currently dealing:
+        return (playerList.get(dealerTurnIndex));
     }
 
     public void printHands() {
