@@ -75,34 +75,54 @@ import javax.swing.JPanel;
 
 class NinetyNine {
 
-    /* Variables */
+    /* Fields */
     private static int tokens = 3; // number of tokens players start with
     private static String deckType = "standard52"; // type of deck the game is played with
     private static int numDecks = 1; // how many decks to shuffle together
-    public static Game game; // FIXME: Should this be public?
-    private static ImageIcon p1c1Image; // human player's card images
-    private static ImageIcon p1c2Image;
-    private static ImageIcon p1c3Image;
+    // TODO: Add card counters to the decks, showing how many cards are in each
+    // deck.
+    public static Game game; // FIXME: Should this be public? I use it regularly in other classes.
+    private static HumanPlayer player = new HumanPlayer("Dead Meat", tokens);
+    private static ComputerPlayer computer1 = new ComputerPlayer("HAL", tokens);
+    private static ComputerPlayer computer2 = new ComputerPlayer("SHODAN", tokens);
+    private static ComputerPlayer computer3 = new ComputerPlayer("GLaDOS", tokens);
+
+    // Note: I've made these image objects class fields in order to allow
+    // manipulation by various methods in this class.
+    // FIXME: Is this necessary?
+    private static ImageIcon pCard1Image; // human player's card images
+    private static ImageIcon pCard2Image;
+    private static ImageIcon pCard3Image;
     private static ImageIcon cardBack0; // card back's image and various rotations
-    private static ImageIcon cardBack1; // FIXME: can I do this better?
-    private static ImageIcon cardBack2;
-    private static ImageIcon cardBack3;
-    private static ImageIcon upArrow;
+    // private static ImageIcon cardBack1; // FIXME: can I do this better?
+    // private static ImageIcon cardBack2;
+    // private static ImageIcon cardBack3;
+    private static ImageIcon upArrow; // Arrows for the turn indicator
     private static ImageIcon downArrow;
     private static ImageIcon rightArrow;
     private static ImageIcon leftArrow;
     private static ImageIcon turnImage;
-    private static JPanel mainPanel; // I'm making this a field so that I can update it from the Game class.
+
+    // These Swing objects are class fields as they need to be updated by other
+    // methods in this class.
+    private static JLabel discardPileLabel;
+    private static JLabel scoreLabel;
+    private static JLabel turnIndicator;
+    private static JButton p1card1;
+    private static JButton p1card2;
+    private static JButton p1card3;
+    private static JLabel playerTokens;
+    private static JLabel c1tokens;
+    private static JLabel c2tokens;
+    private static JLabel c3tokens;
+    private static JLabel potLabel;
 
     public static void main(String[] args) {
 
-        // FIXME: Test code:
-
         // Create a new game:
-        game = new Game(deckType, numDecks, new HumanPlayer("Dead Meat",
-                tokens),
-                new ComputerPlayer("HAL", tokens), new ComputerPlayer("SHODAN", tokens),
-                new ComputerPlayer("GLaDOS", tokens));
+        game = new Game(deckType, numDecks, player,
+                computer1, computer2,
+                computer3);
 
         // Start a new game:
         game.newRound();
@@ -110,10 +130,28 @@ class NinetyNine {
         // Create the main window:
         new NinetyNine();
 
-        // Start the game loop:
-        // FIXME: This should be a loop eventually:
-        game.gameLoop();
+        // Keep playing until only one player remains:
+        while (true) {
+            // Track how many players can play:
+            int playersPlaying = 0;
 
+            // Determine how many players can play:
+            for (Player p : game.getPlayers()) {
+                if (p.isPlaying()) {
+                    playersPlaying++;
+                }
+            }
+
+            // If there's more than one player playing, start the game loop:
+            if (playersPlaying > 1) {
+                // There's still at least two players playing, keep playing:
+                game.gameLoop();
+            } else {
+                // Only one player remains, the victor!
+                System.out.println("Someone won!"); // FIXME!
+                break;
+            }
+        }
     }
 
     /* Window Constructor */
@@ -121,13 +159,15 @@ class NinetyNine {
         // Create the main window:
         JFrame gameWindow = new JFrame("Ninety Nine");
 
-        // FIXME: Load the game images:
+        // Try to load images:
         try {
-            // FIXME: Changing these to the same image:
             cardBack0 = new ImageIcon(ImageIO.read(new File("./cardbacks/disappointment0.png")));
-            cardBack1 = new ImageIcon(ImageIO.read(new File("./cardbacks/disappointment0.png")));
-            cardBack2 = new ImageIcon(ImageIO.read(new File("./cardbacks/disappointment0.png")));
-            cardBack3 = new ImageIcon(ImageIO.read(new File("./cardbacks/disappointment0.png")));
+            // cardBack1 = new ImageIcon(ImageIO.read(new
+            // File("./cardbacks/disappointment0.png")));
+            // cardBack2 = new ImageIcon(ImageIO.read(new
+            // File("./cardbacks/disappointment0.png")));
+            // cardBack3 = new ImageIcon(ImageIO.read(new
+            // File("./cardbacks/disappointment0.png")));
             upArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/upArrow.png")));
             downArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/downArrow.png")));
             rightArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/rightArrow.png")));
@@ -173,29 +213,39 @@ class NinetyNine {
         // images. Future implementations might implement animations, but that's a
         // future problem for future me.
 
-        // FIXME: TEST: Try adding card images to the player's pane:
-
-        // TODO: This might do better as a method, could be optimized.
-
-        // For each of the player's hand, load the appropriate image file:
-        // FIXME: Is there a better way to do this?
-        p1c1Image = game.getPlayer(0).getHand().get(0).getImage();
-        p1c2Image = game.getPlayer(0).getHand().get(1).getImage();
-        p1c3Image = game.getPlayer(0).getHand().get(2).getImage();
-
         // Create objects for the player's panel:
         JLabel playerName = new JLabel(game.getPlayer(0).getName() + "'s hand:");
-        JButton p1card1 = new JButton(p1c1Image);
-        JButton p1card2 = new JButton(p1c2Image);
-        JButton p1card3 = new JButton(p1c3Image);
-        JLabel playerTokens = new JLabel("Tokens: " + game.getPlayer(0).getTokens());
+        p1card1 = new JButton(pCard1Image);
+        p1card2 = new JButton(pCard2Image);
+        p1card3 = new JButton(pCard3Image);
+        playerTokens = new JLabel("Tokens: " + game.getPlayer(0).getTokens());
+        // TODO: Add labels to cards showing their given value/effect. Useful for new
+        // players!
+
+        // For each of the player's hand, load the appropriate image file:
+        updatePlayerCards();
 
         // Add listeners to the player's cards:
         p1card1.addActionListener(e -> {
             // If the game is currently waiting for user input:
-            if (game.getPlayer(0).isWaiting()) {
+            // This prevents the user from commiting to playing a card before their turn.
+            if (player.isWaiting()) {
                 // Then their card selection is valid:
-                game.getPlayer(0).playCard(0);
+                player.playCard(0);
+            }
+        });
+        p1card2.addActionListener(e -> {
+            // If the game is currently waiting for user input:
+            if (player.isWaiting()) {
+                // Then their card selection is valid:
+                player.playCard(1);
+            }
+        });
+        p1card3.addActionListener(e -> {
+            // If the game is currently waiting for user input:
+            if (player.isWaiting()) {
+                // Then their card selection is valid:
+                player.playCard(2);
             }
         });
 
@@ -222,18 +272,18 @@ class NinetyNine {
         JLabel c1name = new JLabel(game.getPlayer(1).getName());
         JLabel c2name = new JLabel(game.getPlayer(2).getName());
         JLabel c3name = new JLabel(game.getPlayer(3).getName());
-        JLabel c1tokens = new JLabel("Tokens: " + game.getPlayer(1).getTokens());
-        JLabel c2tokens = new JLabel("Tokens: " + game.getPlayer(2).getTokens());
-        JLabel c3tokens = new JLabel("Tokens: " + game.getPlayer(3).getTokens());
-        JLabel c1card1 = new JLabel(cardBack1);
-        JLabel c1card2 = new JLabel(cardBack1);
-        JLabel c1card3 = new JLabel(cardBack1);
-        JLabel c2card1 = new JLabel(cardBack2);
-        JLabel c2card2 = new JLabel(cardBack2);
-        JLabel c2card3 = new JLabel(cardBack2);
-        JLabel c3card1 = new JLabel(cardBack3);
-        JLabel c3card2 = new JLabel(cardBack3);
-        JLabel c3card3 = new JLabel(cardBack3);
+        c1tokens = new JLabel("Tokens: " + game.getPlayer(1).getTokens());
+        c2tokens = new JLabel("Tokens: " + game.getPlayer(2).getTokens());
+        c3tokens = new JLabel("Tokens: " + game.getPlayer(3).getTokens());
+        JLabel c1card1 = new JLabel(cardBack0);
+        JLabel c1card2 = new JLabel(cardBack0);
+        JLabel c1card3 = new JLabel(cardBack0);
+        JLabel c2card1 = new JLabel(cardBack0);
+        JLabel c2card2 = new JLabel(cardBack0);
+        JLabel c2card3 = new JLabel(cardBack0);
+        JLabel c3card1 = new JLabel(cardBack0);
+        JLabel c3card2 = new JLabel(cardBack0);
+        JLabel c3card3 = new JLabel(cardBack0);
 
         // Create subpanels for each computer player:
         JPanel c1header = new JPanel();
@@ -280,11 +330,8 @@ class NinetyNine {
         c3panel.add(c3hand);
         c3panel.add(c3footer);
 
-        // FIXME: Set the turnIndicator to prevent compiler complaints:
-        // turnImage = downArrow;
-
-        // Determine which turn indicator image to use:
-        switch (game.getPlayersTurn()) {
+        // Set the turn indicator as appropriate:
+        switch (game.getPlayerIndex()) {
             case 0:
                 turnImage = downArrow;
                 break;
@@ -297,19 +344,14 @@ class NinetyNine {
             case 3:
                 turnImage = rightArrow;
                 break;
-            default:
-                System.err.println("ERROR: Invalid turn indicator.  This shouldn't happen.");
-                break;
         }
 
         // Create the table UI objects:
-        JLabel scoreLabel = new JLabel("Score: " + game.getScore());
+        scoreLabel = new JLabel("Score: " + game.getScore());
         JLabel drawPileLabel = new JLabel(cardBack0);
-        JLabel potLabel = new JLabel("Pot: " + game.getPot());
-        JLabel discardPileLabel = new JLabel(game.getDiscardImage());
-        JLabel turnIndicator = new JLabel(turnImage);
-        // TODO: Properly update the display of the discard pile!
-        // TODO: Add a turn indicator, update as needed!
+        potLabel = new JLabel("Pot: " + game.getPot());
+        discardPileLabel = new JLabel(game.getDiscardImage());
+        turnIndicator = new JLabel(turnImage);
 
         // Create sub-panels for the table panel:
         JPanel tHeader = new JPanel();
@@ -342,5 +384,62 @@ class NinetyNine {
     public static void updateUI() {
         // Update the UI with new images, scores, etc:
         // Player's cards, turn indicator, discard pile, tokens, etc.
+
+        updateTurnIndicator();
+        updatePlayerCards();
+
+        discardPileLabel.setIcon(game.getDiscardImage());
+        scoreLabel.setText("Score: " + game.getScore());
+
+        // TODO: Update tokens, pot.
+        potLabel.setText("Pot: " + game.getPot());
+        playerTokens.setText("Tokens: " + player.getTokens());
+
+        // If player is out, don't display tokens:
+        if (computer1.isPlaying()) {
+            c1tokens.setText("Tokens: " + computer1.getTokens());
+        } else {
+            c1tokens.setText("OUT");
+        }
+
+        if (computer2.isPlaying()) {
+            c2tokens.setText("Tokens: " + computer2.getTokens());
+        } else {
+            c2tokens.setText("OUT");
+        }
+
+        if (computer3.isPlaying()) {
+            c3tokens.setText("Tokens: " + computer3.getTokens());
+        } else {
+            c3tokens.setText("OUT");
+        }
+
+    }
+
+    private static void updateTurnIndicator() {
+        // Update the turn indicator icon.
+
+        // Determine which turn indicator image to use:
+        switch (game.getPlayerIndex()) {
+            case 0:
+                turnIndicator.setIcon(downArrow);
+                break;
+            case 1:
+                turnIndicator.setIcon(leftArrow);
+                break;
+            case 2:
+                turnIndicator.setIcon(upArrow);
+                break;
+            case 3:
+                turnIndicator.setIcon(rightArrow);
+                break;
+        }
+    }
+
+    private static void updatePlayerCards() {
+        // Update the images of the player's cards:
+        p1card1.setIcon(player.getHand().get(0).getImage());
+        p1card2.setIcon(player.getHand().get(1).getImage());
+        p1card3.setIcon(player.getHand().get(2).getImage());
     }
 }
