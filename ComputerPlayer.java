@@ -10,7 +10,7 @@ public class ComputerPlayer extends Player {
     }
 
     /* Methods */
-    public boolean playTurn() {
+    public void playTurn() {
         // Makes this computer player play their turn.
         // Returns true if there's a playable card, false if not.
 
@@ -49,14 +49,26 @@ public class ComputerPlayer extends Player {
             // Play the first playable card:
             Card playCard = playable.get(0);
             this.getHand().playCard(this.getHand().indexOf(playCard), NinetyNine.game.getDiscardDeck());
-            // Update the score:
-            NinetyNine.game.updateScore();
-            // FIXME TEST: Print out the play card:
+
+            // Draw a card:
+            this.drawCard(NinetyNine.game.getDrawDeck());
+
+            // Print out the card played:
             System.out.println(this.getName() + " played " + playCard);
-            return true;
         } else {
-            // If there's no playable cards, you lose:
-            return false;
+            // No playable card, just play the first card in the hand:
+            this.getHand().playCard(0, NinetyNine.game.getDiscardDeck());
+
+            // FIXME: Don't draw a card. This may have UI implications to fix later.
         }
+    }
+
+    public boolean isWaiting() {
+        // The PC is never waiting for input:
+        return false;
+    }
+
+    public void playCard(int playCard) {
+        // This method should never do anything for a computer player.
     }
 }
