@@ -22,7 +22,11 @@ public abstract class Player {
 
     /* Methods */
 
-    public abstract boolean playTurn();
+    public abstract void playTurn();
+
+    public abstract boolean isWaiting();
+
+    public abstract void playCard(int playCard);
 
     public void drawCard(Deck deck) {
         // Draws a card from the given deck, moving it to the player's hand:
