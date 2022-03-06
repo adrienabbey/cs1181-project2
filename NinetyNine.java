@@ -68,6 +68,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -91,6 +92,7 @@ class NinetyNine {
     private static ImageIcon rightArrow;
     private static ImageIcon leftArrow;
     private static ImageIcon turnImage;
+    private static JPanel mainPanel; // I'm making this a field so that I can update it from the Game class.
 
     public static void main(String[] args) {
 
@@ -107,6 +109,11 @@ class NinetyNine {
 
         // Create the main window:
         new NinetyNine();
+
+        // Start the game loop:
+        // FIXME: This should be a loop eventually:
+        game.gameLoop();
+
     }
 
     /* Window Constructor */
@@ -178,10 +185,19 @@ class NinetyNine {
 
         // Create objects for the player's panel:
         JLabel playerName = new JLabel(game.getPlayer(0).getName() + "'s hand:");
-        JLabel p1card1 = new JLabel(p1c1Image);
-        JLabel p1card2 = new JLabel(p1c2Image);
-        JLabel p1card3 = new JLabel(p1c3Image);
+        JButton p1card1 = new JButton(p1c1Image);
+        JButton p1card2 = new JButton(p1c2Image);
+        JButton p1card3 = new JButton(p1c3Image);
         JLabel playerTokens = new JLabel("Tokens: " + game.getPlayer(0).getTokens());
+
+        // Add listeners to the player's cards:
+        p1card1.addActionListener(e -> {
+            // If the game is currently waiting for user input:
+            if (game.getPlayer(0).isWaiting()) {
+                // Then their card selection is valid:
+                game.getPlayer(0).playCard(0);
+            }
+        });
 
         // Create sub-panels for the player panel:
         JPanel pHeader = new JPanel();
@@ -268,7 +284,7 @@ class NinetyNine {
         // turnImage = downArrow;
 
         // Determine which turn indicator image to use:
-        switch (game.whoseTurn()) {
+        switch (game.getPlayersTurn()) {
             case 0:
                 turnImage = downArrow;
                 break;
@@ -321,5 +337,10 @@ class NinetyNine {
         gameWindow.setLocationRelativeTo(null);
         // gameWindow.setResizable(false);
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public static void updateUI() {
+        // Update the UI with new images, scores, etc:
+        // Player's cards, turn indicator, discard pile, tokens, etc.
     }
 }
