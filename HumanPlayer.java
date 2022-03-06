@@ -4,7 +4,7 @@
 public class HumanPlayer extends Player {
     /* Fields */
     boolean waiting; // Tracks whether the game is waiting for input from the player.
-    int playCard; // Tracks what card the player selected.
+    int playCardIndex; // Tracks what card the player selected.
 
     /* Constructor */
     public HumanPlayer(String name, int tokens) {
@@ -12,28 +12,39 @@ public class HumanPlayer extends Player {
     }
 
     /* Methods */
-    public void playTurn() {
-        // FIXME TEST: This needs to work right.
+    synchronized public void playTurn() {
 
         // Set to waiting for input:
         waiting = true;
 
-        // So long as the player hasn't played a card
-        while (waiting) {
-            // FIXME: Just wait for input. Is this okay?
+        // This method waits for a valid input when it's the player's turn.
+        // I discovered I could use wait() and notify() methods to do this.
+        // https://www.geeksforgeeks.org/wait-method-in-java-with-examples/
+
+        // Wait to be notified:
+        try {
+            wait();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
-        // Play the selected card:
-        this.playCard(playCard);
+        // FIXME TEST:
+        System.out.println(this.getName() + " played " + this.getHand().get(playCardIndex));
+        System.out.println();
 
-        // Update the score:
-        NinetyNine.game.updateScore();
+        // Play the selected card:
+        this.getHand().playCard(playCardIndex, NinetyNine.game.getDiscardDeck());
+
+        // Draw a new card:
+        this.drawCard(NinetyNine.game.getDrawDeck());
     }
 
-    public void playCard(int cardIndex) {
+    synchronized public void playCard(int cardIndex) {
         // Sets the played card index and stops waiting:
-        this.playCard = cardIndex;
+        this.playCardIndex = cardIndex;
         waiting = false;
+        notify();
     }
 
     public boolean isWaiting() {
