@@ -47,6 +47,7 @@ public class Card implements Comparable<Card> {
 
     public int getScoreValue() {
         // Returns the score value of the card.
+        // NOTE: This is relevant only to the game of Ninety-Nine!
         // 10s return -10, 9s and 4s return 0, and Kings return 99.
         // All other cards return their point values.
 
@@ -72,7 +73,7 @@ public class Card implements Comparable<Card> {
     }
 
     public ImageIcon getImage() {
-        // Return the card's image with the given dimensions:
+        // Return the card's image, resized to 100 by 145 pixels:
         // Source: https://stackoverflow.com/a/18335435
         ImageIcon imageIcon = new ImageIcon();
         try {
@@ -96,6 +97,8 @@ public class Card implements Comparable<Card> {
         // way to sort their current hand. Cards are sorted based on the desirability to
         // discard, where high rank non-special cards are most desirable to discard,
         // while special cards should be kept as long as possible.
+
+        // NOTE: This is specific to the card game Ninety-Nine!
 
         // Note: for sake of randomness and simplicity, all special cards have the same
         // compare values.
