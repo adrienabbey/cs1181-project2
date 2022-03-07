@@ -1,0 +1,7 @@
+How to play Ninety-Nine:
+
+Every player starts with three tokens.  Each game is split into rounds, where the loser of that round tosses one of their tokens into the pot.  A player who loses without any tokens to spare is out of the game.  This continues until only one player remains, who is declared the winner and takes the pot.
+
+Players take turns dealing cards.  At the start of each round the deck is shuffled and each player is dealt three cards each.  The dealer then turns up the first card from the deck to start the discard pile.  Players then take turns discarding cards and drawing replacements until someone loses.
+
+To win, players must try to avoid letting the score rise above ninety-nine on their turn.  There are four special cards (Kings, 10s, 9s, and 4s), while the rest count as their face value (Queens and Jacks count as 10, and Aces are worth either 11 or 1).  The round continues until the score goes over 99, at which point that player loses.

@@ -130,6 +130,9 @@ class NinetyNine {
         // Create the main window:
         new NinetyNine();
 
+        // Open the instruction window too:
+        new Instructions();
+
         // Keep playing until only one player remains:
         while (true) {
             // Track how many players can play:
@@ -379,6 +382,7 @@ class NinetyNine {
         gameWindow.setLocationRelativeTo(null);
         // gameWindow.setResizable(false);
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     }
 
     public static void updateUI() {
