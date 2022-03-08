@@ -179,13 +179,21 @@ public class Game {
             } else {
                 rotation = true;
             }
+        } else if (card.getRankValue() == 1) {
+            // If the card is an Ace and the score is less than 89:
+            if (roundScore < 89) {
+                roundScore += 11;
+            } else {
+                // Otherwise, the card value is 1:
+                roundScore += 1;
+            }
         } else if (card.getRankValue() > 10) {
             // If the card isn't special and it's value is greater than 10, add 10 to the
             // score:
             roundScore += 10;
         } else {
             // Otherwise, add the card's rank value to the score:
-            roundScore = roundScore + card.getRankValue();
+            roundScore += card.getRankValue();
         }
 
         // If the score is 99 or less:
