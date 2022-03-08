@@ -26,10 +26,6 @@ public abstract class Player {
 
     public abstract void playTurn(); // Humans and computers play very differently.
 
-    // public abstract boolean isWaiting(); // FIXME: I shouldn't need this!
-
-    // public abstract void playCard(int playCard); // FIXME: I shouldn't need this!
-
     public void drawCard(Deck deck) {
         // Draws a card from the given deck, moving it to the player's hand:
         Card card = deck.get(0);
@@ -39,7 +35,7 @@ public abstract class Player {
 
     public boolean lostRound(Game game) {
         // The player lost the round. Return true if they can keep playing:
-        // TODO: Reveal the player's hand if they lose.
+        // Future Idea: Reveal the player's hand if they lose.
 
         System.out.println(getName() + " lost the round.");
 

@@ -42,7 +42,6 @@ public class Instructions {
 
             instrBR.close();
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -55,12 +54,6 @@ public class Instructions {
         // https://stackoverflow.com/a/8792905
         instructionText.setBorder(BorderFactory.createCompoundBorder(instructionText.getBorder(),
                 BorderFactory.createEmptyBorder(8, 8, 8, 8)));
-        // FIXME: Set the appropriate size! Make it uneditable. Load the instructions
-        // from a text file?
-
-        // Create a button to close the instruction window:
-        // JButton okayButton = new JButton("Okay"); // FIXME: Make this close the
-        // window.
 
         // Add the components to where they belong:
         instructionPanel.add(instructionText);

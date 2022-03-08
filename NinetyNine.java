@@ -50,6 +50,13 @@ Basic Design:
 
 Considerations:
     - TODO: Single deck or two?  What happens if cards run out?
+    - TODO: Easter Egg for card back images?
+    - TODO: Add card counters to the decks, showing how many cards are in each deck.
+    - TODO: Add labels to cards showing their given value/effect. Useful for new players!
+    - TODO: If the player loses, pop-up messages will spam open.  If a new window opens, 
+        close the others?
+    - TODO: Find a graceful solution to the game ending.  For example, closing Game Over 
+        window closes the other windows.
 
 Attributions:
     - Playing card graphics (public domain) are from: 
@@ -77,32 +84,28 @@ class NinetyNine {
     private static int tokens = 3; // number of tokens players start with
     private static String deckType = "standard52"; // type of deck the game is played with
     private static int numDecks = 1; // how many decks to shuffle together
-    // TODO: Add card counters to the decks, showing how many cards are in each
-    // deck.
-    public static Game game; // FIXME: Should this be public? I use it regularly in other classes.
+    public static Game game; // I'm making the game object public so that other classes can refer to it. In a
+                             // normal card game, everyone playing has access to basic game information.
+
     private static HumanPlayer player = new HumanPlayer("Dead Meat", tokens);
     private static ComputerPlayer computer1 = new ComputerPlayer("HAL", tokens);
     private static ComputerPlayer computer2 = new ComputerPlayer("SHODAN", tokens);
     private static ComputerPlayer computer3 = new ComputerPlayer("GLaDOS", tokens);
 
     // Note: I've made these image objects class fields in order to allow
-    // manipulation by various methods in this class.
-    // FIXME: Is this necessary?
+    // manipulation by other methods within this class.
     private static ImageIcon pCard1Image; // human player's card images
     private static ImageIcon pCard2Image;
     private static ImageIcon pCard3Image;
     private static ImageIcon cardBack0; // card back's image and various rotations
-    // private static ImageIcon cardBack1; // FIXME: can I do this better?
-    // private static ImageIcon cardBack2;
-    // private static ImageIcon cardBack3;
     private static ImageIcon upArrow; // Arrows for the turn indicator
     private static ImageIcon downArrow;
     private static ImageIcon rightArrow;
     private static ImageIcon leftArrow;
     private static ImageIcon turnImage;
 
-    // These Swing objects are class fields as they need to be updated by other
-    // methods in this class.
+    // These Swing objects are class fields as they need to be updated by the UI
+    // update method in this class.
     private static JLabel discardPileLabel;
     private static JLabel scoreLabel;
     private static JLabel turnIndicator;
@@ -122,7 +125,7 @@ class NinetyNine {
                 computer1, computer2,
                 computer3);
 
-        // Start a new game:
+        // Start the initial round of the game (necessarily before creating the window):
         game.newRound();
 
         // Create the main window:
@@ -157,6 +160,7 @@ class NinetyNine {
                         winner = p;
                     }
                 }
+                // Let the user know who won:
                 System.out.println(winner.getName() + " is the winner!  Congrats!");
                 new Notification("Game Over", (winner.getName() + " is the winner!  Congrats!"));
                 break;
@@ -172,20 +176,12 @@ class NinetyNine {
         // Try to load images:
         try {
             cardBack0 = new ImageIcon(ImageIO.read(new File("./cardbacks/disappointment0.png")));
-            // cardBack1 = new ImageIcon(ImageIO.read(new
-            // File("./cardbacks/disappointment0.png")));
-            // cardBack2 = new ImageIcon(ImageIO.read(new
-            // File("./cardbacks/disappointment0.png")));
-            // cardBack3 = new ImageIcon(ImageIO.read(new
-            // File("./cardbacks/disappointment0.png")));
             upArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/upArrow.png")));
             downArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/downArrow.png")));
             rightArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/rightArrow.png")));
             leftArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/leftArrow.png")));
-            turnImage = new ImageIcon();
-
+            turnImage = new ImageIcon(); // placeholder that updates to show which user is currently playing their turn
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -208,7 +204,7 @@ class NinetyNine {
         c2panel.setLayout(new BoxLayout(c2panel, BoxLayout.Y_AXIS));
         c3panel.setLayout(new BoxLayout(c3panel, BoxLayout.Y_AXIS));
 
-        // Give panels borders:
+        // Set a border around the center panel for clarity:
         centerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         // Add panels to the main panel:
@@ -218,10 +214,9 @@ class NinetyNine {
         mainPanel.add(c2panel, BorderLayout.NORTH);
         mainPanel.add(c3panel, BorderLayout.EAST);
 
-        // FIXME: Source for image syntax: https://stackoverflow.com/a/8334086
+        // Source for image syntax: https://stackoverflow.com/a/8334086
         // For simplicity's sake, I'm just going to use JLabel ImageIcons for card
-        // images. Future implementations might implement animations, but that's a
-        // future problem for future me.
+        // images.
 
         // Create objects for the player's panel:
         JLabel playerName = new JLabel(game.getPlayer(0).getName() + "'s hand:");
@@ -229,8 +224,6 @@ class NinetyNine {
         p1card2 = new JButton(pCard2Image);
         p1card3 = new JButton(pCard3Image);
         playerTokens = new JLabel("Tokens: " + game.getPlayer(0).getTokens());
-        // TODO: Add labels to cards showing their given value/effect. Useful for new
-        // players!
 
         // For each of the player's hand, load the appropriate image file:
         updatePlayerCards();
@@ -276,8 +269,6 @@ class NinetyNine {
         pCards.add(p1card3);
         pFooter.add(playerTokens);
 
-        // TODO: Can I turn each computer layout into a reusable class object?
-
         // Create the computer player's UI objects:
         JLabel c1name = new JLabel(game.getPlayer(1).getName());
         JLabel c2name = new JLabel(game.getPlayer(2).getName());
@@ -305,10 +296,6 @@ class NinetyNine {
         JPanel c1footer = new JPanel();
         JPanel c2footer = new JPanel();
         JPanel c3footer = new JPanel();
-
-        // Configure subpanel layouts:
-        // c1hand.setLayout(new BoxLayout(c1hand, BoxLayout.Y_AXIS));
-        // c3hand.setLayout(new BoxLayout(c3hand, BoxLayout.Y_AXIS));
 
         // Add the computer player's objects to their respective panels:
         c1header.add(c1name);
@@ -339,6 +326,9 @@ class NinetyNine {
         c3panel.add(c3header);
         c3panel.add(c3hand);
         c3panel.add(c3footer);
+
+        // Update the turn indicator:
+        // FIXME: updateTurnIndicator();
 
         // Set the turn indicator as appropriate:
         switch (game.getPlayerIndex()) {
@@ -387,7 +377,7 @@ class NinetyNine {
         gameWindow.pack();
         gameWindow.setVisible(true);
         gameWindow.setLocationRelativeTo(null);
-        // gameWindow.setResizable(false);
+        gameWindow.setResizable(false);
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
@@ -396,17 +386,25 @@ class NinetyNine {
         // Update the UI with new images, scores, etc:
         // Player's cards, turn indicator, discard pile, tokens, etc.
 
+        // Update the turn indicator and the player's card images:
         updateTurnIndicator();
         updatePlayerCards();
 
+        // Update the discard pile card:
         discardPileLabel.setIcon(game.getDiscardImage());
+
+        // Update the round score and pot size:
         scoreLabel.setText("Score: " + game.getScore());
-
-        // TODO: Update tokens, pot.
         potLabel.setText("Pot: " + game.getPot());
-        playerTokens.setText("Tokens: " + player.getTokens());
 
-        // If player is out, don't display tokens:
+        // Update each player's token count:
+        // If a player is out, don't display tokens:
+        if (player.isPlaying()) {
+            playerTokens.setText("Tokens: " + player.getTokens());
+        } else {
+            playerTokens.setText("OUT");
+        }
+
         if (computer1.isPlaying()) {
             c1tokens.setText("Tokens: " + computer1.getTokens());
         } else {
@@ -449,8 +447,11 @@ class NinetyNine {
 
     private static void updatePlayerCards() {
         // Update the images of the player's cards:
-        p1card1.setIcon(player.getHand().get(0).getImage());
-        p1card2.setIcon(player.getHand().get(1).getImage());
-        p1card3.setIcon(player.getHand().get(2).getImage());
+        // But only if the player is still in the game:
+        if (player.isPlaying()) {
+            p1card1.setIcon(player.getHand().get(0).getImage());
+            p1card2.setIcon(player.getHand().get(1).getImage());
+            p1card3.setIcon(player.getHand().get(2).getImage());
+        }
     }
 }

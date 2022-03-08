@@ -25,11 +25,9 @@ public class HumanPlayer extends Player {
         try {
             wait();
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        // FIXME TEST:
         System.out.println(this.getName() + " played " + this.getHand().get(playCardIndex));
         System.out.println();
 

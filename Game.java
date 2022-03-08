@@ -90,12 +90,6 @@ public class Game {
             }
         }
 
-        // FIXME TEST: Sort each player's hand by discard desirability and print:
-        // for (Player p : playerList) {
-        // p.getHand().sort();
-        // System.out.println(p.getHand());
-        // }
-
         // Deal a card to the discard pile:
         drawDeck.playCard(0, discardDeck);
         updateScore();
@@ -106,9 +100,6 @@ public class Game {
         // Update the turn indicator:
         this.nextPlayer();
 
-        // FIXME: I cannot do this! UI hasn't painted yet!
-        // Start the game loop:
-        // gameLoop();
     }
 
     public void gameLoop() {
@@ -150,8 +141,6 @@ public class Game {
             }
         }
 
-        // TODO: Check to see if more than two players can keep playing.
-
         // Start a new round:
         newRound();
     }
@@ -173,7 +162,6 @@ public class Game {
             // If 9, hold (do nothing).
         } else if (card.getRankValue() == 4) {
             // If 4, reverse rotation:
-            // TODO: Verify that this means the previous player goes next.
             if (rotation == true) {
                 rotation = false;
             } else {
@@ -320,7 +308,6 @@ public class Game {
 
     public int getPlayerIndex() {
         // Return the index value of whose turn it is:
-        // System.out.println(playerTurnIndex); // FIXME TEST
         return playerTurnIndex;
     }
 
@@ -330,14 +317,14 @@ public class Game {
     }
 
     public void printHands() {
-        // FIXME: TEST: Print out each player's hands:
+        // Print out each player's hands:
         for (Player p : playerList) {
             System.out.println(p.getName() + "'s hand: " + p.getHand());
         }
     }
 
     public void printDeckSizes() {
-        // FIXME: TEST: Print out the deck sizes:
+        // Print out the deck sizes:
         System.out.println("Game deck size: " + drawDeck.size());
         System.out.println("Discard pile size: " + discardDeck.size());
     }

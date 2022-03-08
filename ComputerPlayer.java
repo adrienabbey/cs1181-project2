@@ -21,8 +21,8 @@ public class ComputerPlayer extends Player {
         // 4: If the player has no playable cards, they lose.
         // 5: If a card was played, then draw a card.
 
-        // TODO: it may be desirable to add some degree of randomness here. Otherwise
-        // the computer players become predictable.
+        // Future idea: it may be desirable to add some degree of randomness here.
+        // Otherwise the computer players become predictable.
 
         // Get the current score:
         int score = NinetyNine.game.getScore();

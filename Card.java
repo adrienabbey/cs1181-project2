@@ -79,7 +79,6 @@ public class Card implements Comparable<Card> {
         try {
             imageIcon = new ImageIcon(ImageIO.read(new File(this.getImageFilePath())));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -102,9 +101,6 @@ public class Card implements Comparable<Card> {
 
         // Note: for sake of randomness and simplicity, all special cards have the same
         // compare values.
-
-        // TODO: Verify the order of cards. Consider giving Kings a different value
-        // later.
 
         // If this card is a special card:
         if (this.rank.value == 13 || this.rank.value == 10 || this.rank.value == 9 || this.rank.value == 4) {
