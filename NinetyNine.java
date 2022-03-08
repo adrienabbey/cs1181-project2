@@ -12,8 +12,6 @@ Design Requirements:
 6. Designed using good object-orientated coding principles
 
 Ninety-Nine (card game):
-TODO: This is based on the rules my family played with.  
-TODO: I need to either clarify that or rename the card game.
 
 How to win:
     - Each player starts with 3 tokens
@@ -37,7 +35,7 @@ Special Cards, Card Values:
     - 10s: subtract 10 from the current score
     - 9s: hold the current score (aka zero points)
     - 4s: reverse back to the previous player (reversing rotation, order of player turns)
-    - Aces count as 1 point
+    - Aces count as 1 or 11 points.  NOTE: I'm automatically selecting 11 when safe, 1 if not.
     - All others: numbered cards count as their face value, Qs and Js count as 10 points.
 
 Basic Design:
@@ -151,7 +149,16 @@ class NinetyNine {
                 game.gameLoop();
             } else {
                 // Only one player remains, the victor!
-                System.out.println("Someone won!"); // FIXME!
+                Player winner = player; // Defaulting to human player, just to prevent compiler complaint about
+                                        // uninitialized variable.
+                for (Player p : game.getPlayers()) {
+                    if (p.isPlaying()) {
+                        // There's only 1 player playing, thus they will be the winner:
+                        winner = p;
+                    }
+                }
+                System.out.println(winner.getName() + " is the winner!  Congrats!");
+                new Notification("Game Over", (winner.getName() + " is the winner!  Congrats!"));
                 break;
             }
         }
