@@ -57,20 +57,10 @@ public class ComputerPlayer extends Player {
             System.out.println(this.getName() + " played " + playCard);
         } else {
             // Print out the card played:
-            System.out.println(this.getName() + " played " + this.getHand().get(0)); // FIXME: Why is this throwing an
-                                                                                     // IndexOutOfBoundsException?
+            System.out.println(this.getName() + " played " + this.getHand().get(0));
 
             // No playable card, just play the first card in the hand:
             this.getHand().playCard(0, NinetyNine.game.getDiscardDeck());
         }
     }
-
-    // public boolean isWaiting() {
-    // // The PC is never waiting for input:
-    // return false;
-    // }
-
-    // public void playCard(int playCard) {
-    // // This method should never do anything for a computer player.
-    // }
 }
