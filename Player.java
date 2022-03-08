@@ -44,6 +44,7 @@ public abstract class Player {
         System.out.println(getName() + " lost the round.");
 
         if (tokens > 0) {
+            new Notification("Round End", (getName() + " lost the round."));
             // If the player has a token, toss it in the pot:
             tokens--;
             game.addToPot();
@@ -51,6 +52,7 @@ public abstract class Player {
         } else {
             // If the player has no tokens left, they lose:
             System.out.println(getName() + " is out of the game.");
+            new Notification("Player Out", (getName() + " is out of the game."));
             return false;
         }
     }
