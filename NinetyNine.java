@@ -57,6 +57,8 @@ Considerations:
         close the others?
     - TODO: Find a graceful solution to the game ending.  For example, closing Game Over 
         window closes the other windows.
+    - TODO: Show the last three discarded cards?  On a fast PC, the player cannot easily
+        see cards played.
 
 Attributions:
     - Playing card graphics (public domain) are from: 
