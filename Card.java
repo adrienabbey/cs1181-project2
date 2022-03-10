@@ -69,7 +69,7 @@ public class Card implements Comparable<Card> {
 
     public String getImageFilePath() {
         // Return the full path for the given card's image file:
-        return ("./PNG-cards-1.3/" + rank.filename + suit.filename + ".png");
+        return ("images/" + rank.filename + suit.filename + ".png");
     }
 
     public ImageIcon getImage() {

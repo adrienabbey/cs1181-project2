@@ -89,10 +89,10 @@ class NinetyNine {
     public static Game game; // I'm making the game object public so that other classes can refer to it. In a
                              // normal card game, everyone playing has access to basic game information.
 
-    private static HumanPlayer player = new HumanPlayer("Dead Meat", tokens);
-    private static ComputerPlayer computer1 = new ComputerPlayer("HAL", tokens);
-    private static ComputerPlayer computer2 = new ComputerPlayer("SHODAN", tokens);
-    private static ComputerPlayer computer3 = new ComputerPlayer("GLaDOS", tokens);
+    private static HumanPlayer player = new HumanPlayer("Player", tokens);
+    private static ComputerPlayer computer1 = new ComputerPlayer("Computer 1", tokens);
+    private static ComputerPlayer computer2 = new ComputerPlayer("Computer 2", tokens);
+    private static ComputerPlayer computer3 = new ComputerPlayer("Computer 3", tokens);
 
     // Note: I've made these image objects class fields in order to allow
     // manipulation by other methods within this class.
@@ -177,11 +177,11 @@ class NinetyNine {
 
         // Try to load images:
         try {
-            cardBack0 = new ImageIcon(ImageIO.read(new File("./cardbacks/disappointment0.png")));
-            upArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/upArrow.png")));
-            downArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/downArrow.png")));
-            rightArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/rightArrow.png")));
-            leftArrow = new ImageIcon(ImageIO.read(new File("./cardbacks/leftArrow.png")));
+            cardBack0 = new ImageIcon(ImageIO.read(new File("images/TimDeck-small.png")));
+            upArrow = new ImageIcon(ImageIO.read(new File("images/upArrow.png")));
+            downArrow = new ImageIcon(ImageIO.read(new File("images/downArrow.png")));
+            rightArrow = new ImageIcon(ImageIO.read(new File("images/rightArrow.png")));
+            leftArrow = new ImageIcon(ImageIO.read(new File("images/leftArrow.png")));
             turnImage = new ImageIcon(); // placeholder that updates to show which user is currently playing their turn
         } catch (IOException e) {
             e.printStackTrace();
