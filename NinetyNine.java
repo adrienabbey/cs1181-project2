@@ -49,9 +49,6 @@ Basic Design:
     - ComputerPlayer class (controller), which controls computer players
 
 Considerations:
-    - TODO: Single deck or two?  What happens if cards run out?
-    - TODO: Easter Egg for card back images?
-    - TODO: Add card counters to the decks, showing how many cards are in each deck.
     - TODO: Add labels to cards showing their given value/effect. Useful for new players!
     - TODO: If the player loses, pop-up messages will spam open.  If a new window opens, 
         close the others?
@@ -63,7 +60,9 @@ Considerations:
 Attributions:
     - Playing card graphics (public domain) are from: 
         https://code.google.com/archive/p/vector-playing-cards/
-    - FIXME: Card backs and arrow images are my own creation.
+    - Card back image is by David Bellot - Berkeley, CA, USA 08/12/2005 - David's web - 
+        David's web, LGPL, https://commons.wikimedia.org/w/index.php?curid=498454
+    - Arrow images are my own creation.
 */
 
 import java.awt.BorderLayout;
@@ -85,7 +84,8 @@ class NinetyNine {
     /* Fields */
     private static int tokens = 3; // number of tokens players start with
     private static String deckType = "standard52"; // type of deck the game is played with
-    private static int numDecks = 1; // how many decks to shuffle together
+    private static int numDecks = 2; // how many decks to shuffle together; I'm using 2 decks since it's not
+                                     // impossible to burn through the entire draw deck in a single round
     public static Game game; // I'm making the game object public so that other classes can refer to it. In a
                              // normal card game, everyone playing has access to basic game information.
 
@@ -177,7 +177,7 @@ class NinetyNine {
 
         // Try to load images:
         try {
-            cardBack0 = new ImageIcon(ImageIO.read(new File("images/TimDeck-small.png")));
+            cardBack0 = new ImageIcon(ImageIO.read(new File("images/cardback.png")));
             upArrow = new ImageIcon(ImageIO.read(new File("images/upArrow.png")));
             downArrow = new ImageIcon(ImageIO.read(new File("images/downArrow.png")));
             rightArrow = new ImageIcon(ImageIO.read(new File("images/rightArrow.png")));
