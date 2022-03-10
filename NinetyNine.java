@@ -48,15 +48,6 @@ Basic Design:
     - HumanPlayer class (controller), which handles user interfacing
     - ComputerPlayer class (controller), which controls computer players
 
-Considerations:
-    - TODO: Add labels to cards showing their given value/effect. Useful for new players!
-    - TODO: If the player loses, pop-up messages will spam open.  If a new window opens, 
-        close the others?
-    - TODO: Find a graceful solution to the game ending.  For example, closing Game Over 
-        window closes the other windows.
-    - TODO: Show the last three discarded cards?  On a fast PC, the player cannot easily
-        see cards played.
-
 Attributions:
     - Playing card graphics (public domain) are from: 
         https://code.google.com/archive/p/vector-playing-cards/
@@ -99,7 +90,8 @@ class NinetyNine {
     private static ImageIcon pCard1Image; // human player's card images
     private static ImageIcon pCard2Image;
     private static ImageIcon pCard3Image;
-    private static ImageIcon cardBack0; // card back's image and various rotations
+    private static ImageIcon cardBack; // card back's image and various rotations
+    private static ImageIcon blank; // blank image holder for empty hands
     private static ImageIcon upArrow; // Arrows for the turn indicator
     private static ImageIcon downArrow;
     private static ImageIcon rightArrow;
@@ -119,6 +111,15 @@ class NinetyNine {
     private static JLabel c2tokens;
     private static JLabel c3tokens;
     private static JLabel potLabel;
+    private static JLabel c1card1;
+    private static JLabel c1card2;
+    private static JLabel c1card3;
+    private static JLabel c2card1;
+    private static JLabel c2card2;
+    private static JLabel c2card3;
+    private static JLabel c3card1;
+    private static JLabel c3card2;
+    private static JLabel c3card3;
 
     public static void main(String[] args) {
 
@@ -150,7 +151,11 @@ class NinetyNine {
 
             // If there's more than one player playing, start the game loop:
             if (playersPlaying > 1) {
-                // There's still at least two players playing, keep playing:
+                // There's still at least two players playing, keep playing.
+
+                // Start a new round before starting the game loop
+                game.newRound();
+                // Start the game loop:
                 game.gameLoop();
             } else {
                 // Only one player remains, the victor!
@@ -177,7 +182,8 @@ class NinetyNine {
 
         // Try to load images:
         try {
-            cardBack0 = new ImageIcon(ImageIO.read(new File("images/cardback.png")));
+            cardBack = new ImageIcon(ImageIO.read(new File("images/cardback.png")));
+            blank = new ImageIcon(ImageIO.read(new File("images/blank.png")));
             upArrow = new ImageIcon(ImageIO.read(new File("images/upArrow.png")));
             downArrow = new ImageIcon(ImageIO.read(new File("images/downArrow.png")));
             rightArrow = new ImageIcon(ImageIO.read(new File("images/rightArrow.png")));
@@ -278,15 +284,15 @@ class NinetyNine {
         c1tokens = new JLabel("Tokens: " + game.getPlayer(1).getTokens());
         c2tokens = new JLabel("Tokens: " + game.getPlayer(2).getTokens());
         c3tokens = new JLabel("Tokens: " + game.getPlayer(3).getTokens());
-        JLabel c1card1 = new JLabel(cardBack0);
-        JLabel c1card2 = new JLabel(cardBack0);
-        JLabel c1card3 = new JLabel(cardBack0);
-        JLabel c2card1 = new JLabel(cardBack0);
-        JLabel c2card2 = new JLabel(cardBack0);
-        JLabel c2card3 = new JLabel(cardBack0);
-        JLabel c3card1 = new JLabel(cardBack0);
-        JLabel c3card2 = new JLabel(cardBack0);
-        JLabel c3card3 = new JLabel(cardBack0);
+        c1card1 = new JLabel(cardBack);
+        c1card2 = new JLabel(cardBack);
+        c1card3 = new JLabel(cardBack);
+        c2card1 = new JLabel(cardBack);
+        c2card2 = new JLabel(cardBack);
+        c2card3 = new JLabel(cardBack);
+        c3card1 = new JLabel(cardBack);
+        c3card2 = new JLabel(cardBack);
+        c3card3 = new JLabel(cardBack);
 
         // Create subpanels for each computer player:
         JPanel c1header = new JPanel();
@@ -329,9 +335,6 @@ class NinetyNine {
         c3panel.add(c3hand);
         c3panel.add(c3footer);
 
-        // Update the turn indicator:
-        // FIXME: updateTurnIndicator();
-
         // Set the turn indicator as appropriate:
         switch (game.getPlayerIndex()) {
             case 0:
@@ -350,7 +353,7 @@ class NinetyNine {
 
         // Create the table UI objects:
         scoreLabel = new JLabel("Score: " + game.getScore());
-        JLabel drawPileLabel = new JLabel(cardBack0);
+        JLabel drawPileLabel = new JLabel(cardBack);
         potLabel = new JLabel("Pot: " + game.getPot());
         discardPileLabel = new JLabel(game.getDiscardImage());
         turnIndicator = new JLabel(turnImage);
@@ -411,18 +414,30 @@ class NinetyNine {
             c1tokens.setText("Tokens: " + computer1.getTokens());
         } else {
             c1tokens.setText("OUT");
+            // Also hide their cards:
+            c1card1.setIcon(blank);
+            c1card2.setIcon(blank);
+            c1card3.setIcon(blank);
         }
 
         if (computer2.isPlaying()) {
             c2tokens.setText("Tokens: " + computer2.getTokens());
         } else {
             c2tokens.setText("OUT");
+            // Also hide their cards:
+            c2card1.setIcon(blank);
+            c2card2.setIcon(blank);
+            c2card3.setIcon(blank);
         }
 
         if (computer3.isPlaying()) {
             c3tokens.setText("Tokens: " + computer3.getTokens());
         } else {
             c3tokens.setText("OUT");
+            // Also hide their cards:
+            c3card1.setIcon(blank);
+            c3card2.setIcon(blank);
+            c3card3.setIcon(blank);
         }
 
     }
@@ -454,6 +469,10 @@ class NinetyNine {
             p1card1.setIcon(player.getHand().get(0).getImage());
             p1card2.setIcon(player.getHand().get(1).getImage());
             p1card3.setIcon(player.getHand().get(2).getImage());
+        } else {
+            p1card1.setIcon(blank);
+            p1card2.setIcon(blank);
+            p1card3.setIcon(blank);
         }
     }
 }

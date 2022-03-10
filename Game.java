@@ -140,9 +140,6 @@ public class Game {
                 NinetyNine.updateUI();
             }
         }
-
-        // Start a new round:
-        newRound();
     }
 
     public boolean updateScore() {
